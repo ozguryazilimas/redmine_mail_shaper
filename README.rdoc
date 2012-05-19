@@ -1,3 +1,3 @@
-= mail_shaper
+= redmine_mail_shaper
 
 Description goes here
