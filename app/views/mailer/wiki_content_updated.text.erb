@@ -1,0 +1,30 @@
+<%= l(:mail_body_wiki_content_updated, :id => h(@wiki_content.page.pretty_title),
+                                       :author => h(@wiki_content.author)) %>
+<%= @wiki_content.comments %>
+
+<%= @wiki_content.page.pretty_title %>:
+<%= @wiki_content_url %>
+<%= l(:label_view_diff) %>:
+<%= @wiki_diff_url %>
+<%
+  @page = @wiki_content.page
+  @diff = @page.diff @wiki_content.version
+
+  @template_from = "%s %s (%s, %s)" % [l(:label_version),
+    @diff.content_from.version,
+    @diff.content_from.author ? @diff.content_from.author.name : l(:label_user_anonymous),
+    format_time(@diff.content_from.updated_on)
+  ]
+
+  @template_to = "%s %s/%s (%s, %s)" % [l(:label_version),
+    @diff.content_to.version,
+    @page.content.version,
+    @diff.content_to.author ? @diff.content_to.author.name : l(:label_user_anonymous),
+    format_time(@diff.content_to.updated_on)
+  ]
+
+%>
+<%= @template_from %> -> <%= @template_to %>
+
+<%= simple_format_without_paragraph @diff.to_html %>
+

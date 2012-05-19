@@ -1,0 +1,35 @@
+<style type="text/css">
+  .diff_out { background: #fcc; }
+  .diff_out span { background: #faa; }
+  .diff_in { background: #cfc; }
+  .diff_in span { background: #afa; }
+</style>
+<p><%= l(:mail_body_wiki_content_updated, :id => link_to(h(@wiki_content.page.pretty_title), @wiki_content_url),
+                                          :author => h(@wiki_content.author)) %><br />
+<em><%=h @wiki_content.comments %></em></p>
+
+<p><%= l(:label_view_diff) %>:<br />
+<%= link_to h(@wiki_diff_url), @wiki_diff_url %></p>
+<%
+  @page = @wiki_content.page
+  @diff = @page.diff @wiki_content.version
+%>
+<p>
+<%= l(:label_version) %> <%= link_to @diff.content_from.version, :controller => :wiki, :action => 'show', :id => @page.title, :project_id => @page.project, :version => @diff.content_from.version %>
+<em>(<%= @diff.content_from.author ?
+             @diff.content_from.author.name : l(:label_user_anonymous)
+      %>, <%= format_time(@diff.content_from.updated_on) %>)</em>
+&#8594;
+<%= l(:label_version) %> <%= link_to @diff.content_to.version, :controller => :wiki, :action => 'show',
+                             :id => @page.title, :project_id => @page.project,
+                             :version => @diff.content_to.version
+                          %>/<%= @page.content.version %>
+<em>(<%= @diff.content_to.author ?
+             link_to_user(@diff.content_to.author.name) : l(:label_user_anonymous)
+      %>, <%= format_time(@diff.content_to.updated_on) %>)</em>
+</p>
+
+<div class="text-diff">
+<%= simple_format_without_paragraph @diff.to_html %>
+</div>
+
