@@ -1,0 +1,4 @@
+# Turkish strings go here for Rails i18n
+tr:
+  my_label: "My label"
+
