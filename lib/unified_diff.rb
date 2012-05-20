@@ -17,7 +17,7 @@ module Diff
       diffs = Diff::LCS.diff array_from, array_to
       diffs.each do |diff|
         begin
-          hunk = Diff::LCS::Hunk.new(array_from, array_to, diff, 1, len)
+          hunk = Diff::LCS::Hunk.new(array_from, array_to, diff, 2, len)
           len = hunk.file_length_difference
           next unless oldhunk
 
