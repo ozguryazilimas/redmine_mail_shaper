@@ -10,6 +10,9 @@
   @page = @wiki_content.page
   @diff = @page.diff @wiki_content.version
 
+  @data_from = @diff.content_from.data
+  @data_to = @diff.content_to.data
+
   @template_from = "%s %s (%s, %s)" % [l(:label_version),
     @diff.content_from.version,
     @diff.content_from.author ? @diff.content_from.author.name : l(:label_user_anonymous),
@@ -26,5 +29,5 @@
 %>
 <%= @template_from %> -> <%= @template_to %>
 
-<%= simple_format_without_paragraph @diff.to_html %>
+<%= Diff::LCS.unified_diff(@data_from, @data_to) %>
 
