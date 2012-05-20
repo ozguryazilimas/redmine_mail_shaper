@@ -28,7 +28,7 @@ module Diff
           end
         ensure
           oldhunk = hunk
-          # difference << newline_seperator
+          difference << newline_seperator
         end
       end
 
