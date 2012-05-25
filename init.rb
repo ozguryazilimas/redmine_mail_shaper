@@ -14,3 +14,12 @@ Redmine::Plugin.register :redmine_mail_shaper do
 end
 
 
+require 'dispatcher'
+
+Dispatcher.to_prepare :redmine_mail_shaper do
+  unless IssuesHelper.included_modules.include?(RedmineMailShaper::Patches::IssuesHelperMailShaperPatch)
+    IssuesHelper.send(:include, RedmineMailShaper::Patches::IssuesHelperMailShaperPatch)
+  end
+end
+
+
