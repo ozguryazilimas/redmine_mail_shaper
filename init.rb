@@ -15,7 +15,9 @@ Redmine::Plugin.register :redmine_mail_shaper do
   settings :partial => 'redmine_mail_shaper/settings',
     :default => {
       :wiki_diff_on_update => 1,
-      :wiki_diff_on_create => 1
+      :wiki_diff_on_create => 1,
+      :issue_show_parent_subject => 1,
+      :diff_hunk_line_size => 2
   }
 
 end

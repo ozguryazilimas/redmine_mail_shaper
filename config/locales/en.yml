@@ -3,4 +3,5 @@ en:
   setting_wiki_diff_on_update: "Changes on wiki page updates"
   setting_wiki_diff_on_create: "Content of new wiki pages"
   setting_issue_show_parent_subject: "Issue parent subject"
+  setting_diff_hunk_line_size: "Number of lines around differences"
 
