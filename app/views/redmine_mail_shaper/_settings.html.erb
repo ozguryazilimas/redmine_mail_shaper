@@ -1,5 +1,9 @@
-<fieldset><legend><%=h l(:label_wiki) %></legend>
+<fieldset><legend><%=h l(:label_mail_notification_content) %></legend>
   <div class="box tabular settings">
+    <p>
+      <%= content_tag :label, l(:setting_issue_show_parent_subject) %>
+      <%= check_box_tag 'settings[issue_show_parent_subject]', 1, RedmineMailShaper.settings[:issue_show_parent_subject] %>
+    </p>
     <p>
       <%= content_tag :label, l(:setting_wiki_diff_on_update) %>
       <%= check_box_tag 'settings[wiki_diff_on_update]', 'enabled', RedmineMailShaper.settings[:wiki_diff_on_update] %>
@@ -11,16 +15,7 @@
   </div>
 </fieldset>
 
-<fieldset><legend><%=h l(:label_issue) %></legend>
-  <div class="box tabular settings">
-    <p>
-      <%= content_tag :label, l(:setting_issue_show_parent_subject) %>
-      <%= check_box_tag 'settings[issue_show_parent_subject]', 1, RedmineMailShaper.settings[:issue_show_parent_subject] %>
-    </p>
-  </div>
-</fieldset>
-
-<fieldset><legend><%=h l(:label_view_diff) %></legend>
+<fieldset><legend><%=h l(:label_difference_settings) %></legend>
   <div class="box tabular settings">
     <p>
       <%= content_tag :label, l(:setting_diff_hunk_line_size) %>

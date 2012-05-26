@@ -4,4 +4,6 @@ tr:
   setting_wiki_diff_on_create: "Yeni Wiki sayfalarının içeriği"
   setting_issue_show_parent_subject: "İş kaydı üst iş konusu"
   setting_diff_hunk_line_size: "Farkların etrafındaki satır sayısı"
+  label_difference_settings: "Fark ayarları"
+  label_mail_notification_content: "Posta uyarıları içeriği"
 
