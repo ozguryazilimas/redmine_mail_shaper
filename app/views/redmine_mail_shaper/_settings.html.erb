@@ -1,0 +1,31 @@
+<fieldset><legend><%=h l(:label_wiki) %></legend>
+  <div class="box tabular settings">
+    <p>
+      <%= content_tag :label, l(:setting_wiki_diff_on_update) %>
+      <%= check_box_tag 'settings[wiki_diff_on_update]', 'enabled', RedmineIssueWeight.settings[:wiki_diff_on_update] %>
+    </p>
+    <p>
+      <%= content_tag :label, l(:setting_wiki_diff_on_create) %>
+      <%= check_box_tag 'settings[wiki_diff_on_create]', 'enabled', RedmineIssueWeight.settings[:wiki_diff_on_create] %>
+    </p>
+  </div>
+</fieldset>
+
+<fieldset><legend><%=h l(:label_issue) %></legend>
+  <div class="box tabular settings">
+    <p>
+      <%= content_tag :label, l(:setting_issue_show_parent) %>
+      <%= check_box_tag 'settings[issue_show_parent]', 'enabled', RedmineIssueWeight.settings[:issue_show_parent] %>
+    </p>
+  </div>
+</fieldset>
+
+<fieldset><legend><%=h l(:label_view_diff) %></legend>
+  <div class="box tabular settings">
+    <p>
+      <%= content_tag :label, l(:setting_everything_is_something) %>
+      <%= check_box_tag 'settings[wiki_diff_on_update]', 'enabled', RedmineIssueWeight.settings[:everything_is_something] %>
+    </p>
+  </div>
+</fieldset>
+

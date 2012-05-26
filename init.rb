@@ -11,6 +11,13 @@ Redmine::Plugin.register :redmine_mail_shaper do
   url 'http://www.ozguryazilim.com.tr'
   author_url 'http://www.ozguryazilim.com.tr'
   requires_redmine :version_or_higher => '1.4.0' # not tested with versions below
+
+  settings :partial => 'redmine_mail_shaper/settings',
+    :default => {
+      :wiki_diff_on_update => 1,
+      :wiki_diff_on_create => 1
+  }
+
 end
 
 
