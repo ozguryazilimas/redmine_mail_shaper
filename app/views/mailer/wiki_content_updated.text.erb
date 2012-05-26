@@ -7,27 +7,27 @@
 <%= l(:label_view_diff) %>:
 <%= @wiki_diff_url %>
 <%
-  @page = @wiki_content.page
-  @diff = @page.diff @wiki_content.version
+  if Setting[:plugin_redmine_mail_shaper][:wiki_diff_on_update]
+    @page = @wiki_content.page
+    @diff = @page.diff @wiki_content.version
 
-  @data_from = @diff.content_from.data
-  @data_to = @diff.content_to.data
+    @data_from = @diff.content_from.data
+    @data_to = @diff.content_to.data
 
-  @template_from = "%s %s (%s, %s)" % [l(:label_version),
-    @diff.content_from.version,
-    @diff.content_from.author ? @diff.content_from.author.name : l(:label_user_anonymous),
-    format_time(@diff.content_from.updated_on)
-  ]
+    @template_from = "%s %s (%s, %s)" % [l(:label_version),
+      @diff.content_from.version,
+      @diff.content_from.author ? @diff.content_from.author.name : l(:label_user_anonymous),
+      format_time(@diff.content_from.updated_on)
+    ]
 
-  @template_to = "%s %s/%s (%s, %s)" % [l(:label_version),
-    @diff.content_to.version,
-    @page.content.version,
-    @diff.content_to.author ? @diff.content_to.author.name : l(:label_user_anonymous),
-    format_time(@diff.content_to.updated_on)
-  ]
-
+    @template_to = "%s %s/%s (%s, %s)" % [l(:label_version),
+      @diff.content_to.version,
+      @page.content.version,
+      @diff.content_to.author ? @diff.content_to.author.name : l(:label_user_anonymous),
+      format_time(@diff.content_to.updated_on)
+    ]
 %>
 <%= @template_from %> -> <%= @template_to %>
 
 <%= Diff::LCS.unified_diff(@data_from, @data_to) %>
-
+<% end %>

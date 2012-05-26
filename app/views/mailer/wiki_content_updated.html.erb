@@ -11,8 +11,9 @@
 <p><%= l(:label_view_diff) %>:<br />
 <%= link_to h(@wiki_diff_url), @wiki_diff_url %></p>
 <%
-  @page = @wiki_content.page
-  @diff = @page.diff @wiki_content.version
+  if Setting[:plugin_redmine_mail_shaper][:wiki_diff_on_update]
+    @page = @wiki_content.page
+    @diff = @page.diff @wiki_content.version
 %>
 <p>
 <%= l(:label_version) %> <%= link_to @diff.content_from.version, :controller => :wiki, :action => 'show', :id => @page.title, :project_id => @page.project, :version => @diff.content_from.version %>
@@ -32,4 +33,4 @@
 <div class="text-diff">
 <%= simple_format_without_paragraph @diff.to_html %>
 </div>
-
+<% end %>
