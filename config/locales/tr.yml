@@ -1,5 +1,6 @@
 # Turkish strings go here for Rails i18n
 tr:
-  setting_wiki_diff_on_update: "Wiki sayfası güncellemelerini göster"
-  setting_wiki_diff_on_create: "Yeni Wiki sayfalarının içeriğini göster"
+  setting_wiki_diff_on_update: "Wiki sayfası güncellemeleri"
+  setting_wiki_diff_on_create: "Yeni Wiki sayfalarının içeriği"
+  setting_issue_show_parent_subject: "İş kaydı üst iş konusu"
 

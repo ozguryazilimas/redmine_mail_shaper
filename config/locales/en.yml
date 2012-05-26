@@ -1,5 +1,6 @@
 # English strings go here for Rails i18n
 en:
-  setting_wiki_diff_on_update: "Show changes on wiki page updates"
-  setting_wiki_diff_on_create: "Show content of new wiki pages"
+  setting_wiki_diff_on_update: "Changes on wiki page updates"
+  setting_wiki_diff_on_create: "Content of new wiki pages"
+  setting_issue_show_parent_subject: "Issue parent subject"
 

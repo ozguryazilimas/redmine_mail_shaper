@@ -1,7 +1,7 @@
 <%= "#{issue.tracker.name} ##{issue.id}: #{issue.subject}" %>
 <%= issue_url %>
 <% parent_subject = parent_issue_subject(issue) %>
-<% unless parent_subject.blank? %><%= l(:field_parent_issue) %>: <%= parent_subject %><% end %>
+<% if Setting[:plugin_redmine_mail_shaper][:issue_show_parent_subject] and not parent_subject.blank? %><%= l(:field_parent_issue) %>: <%= parent_subject %><% end %><% end %>
 <%=l(:field_author)%>: <%= issue.author %>
 <%=l(:field_status)%>: <%= issue.status %>
 <%=l(:field_priority)%>: <%= issue.priority %>
