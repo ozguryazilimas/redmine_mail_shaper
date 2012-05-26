@@ -5,6 +5,6 @@
 <%= @wiki_content_url %>
 
 <% if Setting[:plugin_redmine_mail_shaper][:wiki_diff_on_create] %>
-<%= @wiki_content.text %>
+<%= truncate_for_mail_shaper @wiki_content.text %>
 <% end %>
 

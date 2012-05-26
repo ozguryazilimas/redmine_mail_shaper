@@ -17,7 +17,8 @@ Redmine::Plugin.register :redmine_mail_shaper do
       :wiki_diff_on_update => 1,
       :wiki_diff_on_create => 1,
       :issue_show_parent_subject => 1,
-      :diff_hunk_line_size => 2
+      :diff_hunk_line_size => 2,
+      :diff_max_lines_displayed => 50
   }
 
 end

@@ -4,7 +4,7 @@
 
 <% if Setting[:plugin_redmine_mail_shaper][:wiki_diff_on_create] %>
   <pre>
-    <%= @wiki_content.text %>
+    <%= truncate_for_mail_shaper @wiki_content.text %>
   </pre>
 <% end %>
 

@@ -6,4 +6,5 @@ tr:
   setting_diff_hunk_line_size: "Farkların etrafındaki satır sayısı"
   label_difference_settings: "Fark ayarları"
   label_mail_notification_content: "Posta uyarıları içeriği"
+  text_zero_to_disable: "Kapatmak için sıfır değeri (0) giriniz"
 

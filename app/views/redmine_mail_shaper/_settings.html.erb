@@ -22,6 +22,11 @@
       <%= select_tag 'settings[diff_hunk_line_size]',
             options_for_select((0..10).map {|k| [k*2, k]}, RedmineMailShaper.settings[:diff_hunk_line_size]) %>
     </p>
+    <p>
+      <%= content_tag :label, l(:setting_diff_max_lines_displayed) %>
+      <%= text_field_tag 'settings[diff_hunk_line_size]', RedmineMailShaper.settings[:diff_max_lines_displayed], :size => 5 %>
+      <em class="info"><%= l(:text_zero_to_disable) %></em>
+    </p>
   </div>
 </fieldset>
 
