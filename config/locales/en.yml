@@ -5,6 +5,6 @@ en:
   setting_issue_show_parent_subject: "Issue parent subject"
   setting_diff_hunk_line_size: "Number of lines around differences"
   label_difference_settings: "Difference settings"
-  label_mail_notification_content: "Mail notification content"
+  label_add_to_notification_mails: "Notification mails include"
   text_zero_to_disable: "Use zero value (0) to disable"
 

@@ -1,16 +1,16 @@
-<fieldset><legend><%=h l(:label_mail_notification_content) %></legend>
+<fieldset><legend><%=h l(:label_add_to_notification_mails) %></legend>
   <div class="box tabular settings">
     <p>
       <%= content_tag :label, l(:setting_issue_show_parent_subject) %>
-      <%= check_box_tag 'settings[issue_show_parent_subject]', 1, RedmineMailShaper.settings[:issue_show_parent_subject] %>
+      <%= check_box_tag 'settings[issue_show_parent_subject]', 1, settings[:issue_show_parent_subject] %>
     </p>
     <p>
       <%= content_tag :label, l(:setting_wiki_diff_on_update) %>
-      <%= check_box_tag 'settings[wiki_diff_on_update]', 'enabled', RedmineMailShaper.settings[:wiki_diff_on_update] %>
+      <%= check_box_tag 'settings[wiki_diff_on_update]', 1, settings[:wiki_diff_on_update] %>
     </p>
     <p>
       <%= content_tag :label, l(:setting_wiki_diff_on_create) %>
-      <%= check_box_tag 'settings[wiki_diff_on_create]', 'enabled', RedmineMailShaper.settings[:wiki_diff_on_create] %>
+      <%= check_box_tag 'settings[wiki_diff_on_create]', 1, settings[:wiki_diff_on_create] %>
     </p>
   </div>
 </fieldset>
@@ -20,13 +20,12 @@
     <p>
       <%= content_tag :label, l(:setting_diff_hunk_line_size) %>
       <%= select_tag 'settings[diff_hunk_line_size]',
-            options_for_select((0..10).map {|k| [k*2, k]}, RedmineMailShaper.settings[:diff_hunk_line_size]) %>
+            options_for_select((0..10).map {|k| [k*2, k]}, settings[:diff_hunk_line_size].to_i) %>
     </p>
     <p>
       <%= content_tag :label, l(:setting_diff_max_lines_displayed) %>
-      <%= text_field_tag 'settings[diff_hunk_line_size]', RedmineMailShaper.settings[:diff_max_lines_displayed], :size => 5 %>
+      <%= text_field_tag 'settings[diff_max_lines_displayed]', settings[:diff_max_lines_displayed], :size => 5 %>
       <em class="info"><%= l(:text_zero_to_disable) %></em>
     </p>
   </div>
 </fieldset>
-
