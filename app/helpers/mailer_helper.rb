@@ -19,5 +19,27 @@ module MailerHelper
     str_truncated
   end
 
+  def convert_diff_to_html_diff(diff)
+    newline_seperator = "\r\n"
+    htmldiff = "<pre>"
+
+    diff.gsub!(newline_seperator, "\n")
+
+    diff.split("\n").each do |line|
+      case line
+      when /^\+/
+        htmldiff << line.gsub(/^\+/, '<span class="diff_in">') << '</span>' << "\n"
+      when /^\-/
+        htmldiff << line.gsub(/^\-/, '<span class="diff_out">') << '</span>' << "\n"
+      else
+        htmldiff << line << "\n"
+      end
+    end
+
+    htmldiff << "</pre>" << "\n"
+    Rails.logger.debug "HTMLDIFF: #{htmldiff.inspect}"
+    htmldiff
+  end
+
 end
 

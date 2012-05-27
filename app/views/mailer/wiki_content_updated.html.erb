@@ -31,6 +31,8 @@
 </p>
 
 <div class="text-diff">
-<%= simple_format_without_paragraph truncate_for_mail_shaper @diff.to_html %>
+<% @unified_diff = Diff::LCS.unified_diff(@diff.content_from.data, @diff.content_to.data) %>
+<% @html_diff = convert_diff_to_html_diff(@unified_diff) %>
+<%= truncate_for_mail_shaper @html_diff %>
 </div>
 <% end %>
