@@ -17,7 +17,7 @@ module Diff
       diffs = Diff::LCS.diff array_from, array_to
       diffs.each do |diff|
         begin
-          hunk = Diff::LCS::Hunk.new(array_from, array_to, diff, RedmineMailShaper.settings[:diff_hunk_line_size], len)
+          hunk = Diff::LCS::Hunk.new(array_from, array_to, diff, RedmineMailShaper.settings[:diff_hunk_line_size].to_i, len)
           len = hunk.file_length_difference
           next unless oldhunk
 
