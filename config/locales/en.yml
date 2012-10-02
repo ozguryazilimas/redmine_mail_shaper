@@ -8,3 +8,7 @@ en:
   label_add_to_notification_mails: "Notification mails include"
   text_zero_to_disable: "Use zero value (0) to disable"
 
+  journal_entry_time_entry_create: "New spent time"
+  journal_entry_time_entry_delete: "Spent time deleted"
+  journal_entry_time_entry_update: "Spent time updated"
+
