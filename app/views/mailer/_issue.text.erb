@@ -8,7 +8,7 @@
 <%=l(:field_assigned_to)%>: <%= issue.assigned_to %>
 <%=l(:field_category)%>: <%= issue.category %>
 <%=l(:field_fixed_version)%>: <%= issue.fixed_version %>
-<%=l(:label_spent_time)%>: <%= issue.total_spent_hours > 0 ? issue.total_spent_hours : "-" %>
+<%=l(:label_spent_time)%>: <%= issue.total_spent_hours > 0 ? l(:label_f_hour_plural, :value => "%.2f" % issue.total_spent_hours) : "-" %>
 <% issue.custom_field_values.each do |c| %><%= c.custom_field.name %>: <%= show_value(c) %>
 <% end %>
 
