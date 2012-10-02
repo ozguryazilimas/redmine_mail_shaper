@@ -33,29 +33,34 @@ module RedmineMailShaper
             entry_attrs = YAML.load(detail.old_value)
 
             link_value = l(:label_f_hour_plural, :value => entry_attrs['hours'])
-            link_value += " <i>#{entry_attrs['activity_name']}</i>"
+            link_value += no_html ? " #{entry_attrs['activity_name']}" :
+                                    " <i>#{entry_attrs['activity_name']}</i>"
             link_value += entry_attrs['comments']
 
             if detail.value == 'update'
               link_value_was = l(:label_f_hour_plural, :value => entry_attrs['hours_was'])
-              link_value_was += " <i>#{entry_attrs['activity_name_was']}</i>"
+              link_value_was += no_html ? " #{entry_attrs['activity_name_was']}" :
+                                          " <i>#{entry_attrs['activity_name_was']}</i>"
               link_value_was += entry_attrs['comments_was']
 
               link_value = "#{link_value_was} -> #{link_value}"
             end
 
             if time_entry
-              time_entry_link = link_to(link_value,
+              time_entry_link = no_html ? link_value :
+                                link_to(link_value,
                                   :controller => 'timelog',
                                   :action => 'edit',
                                   :issue_id => time_entry.issue_id,
                                   :id => time_entry.id
                                 )
             else
-              time_entry_link = "<strike><i>#{link_value} #{l(:label_deleted)}</i></strike>"
+              time_entry_link = no_html ? "#{link_value} #{l(:label_deleted)}" :
+                                         "<strike><i>#{link_value} #{l(:label_deleted)}</i></strike>"
             end
 
-            rval = ["<strong>#{time_entry_change}</strong> #{time_entry_link}"]
+            rval = no_html ? ["#{time_entry_change} #{time_entry_link}"] :
+                             ["<strong>#{time_entry_change}</strong> #{time_entry_link}"]
           else
             rval = details_to_strings_without_mail_shaper(details, no_html, options)
           end
