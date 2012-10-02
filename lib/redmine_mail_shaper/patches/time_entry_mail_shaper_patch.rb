@@ -37,6 +37,7 @@ module RedmineMailShaper
           activity_old = TimeEntryActivity.find(activity_id_was).name rescue ''
           activity_new = TimeEntryActivity.find(activity_id).name rescue ''
 
+          # keep obj values as hash in db to allow conditional formatting on helper
           obj_old_value = {
             'hours_was' => hours_was,
             'hours' => hours,
