@@ -61,11 +61,15 @@ module RedmineMailShaper
 
             rval = no_html ? ["#{time_entry_change} #{time_entry_link}"] :
                              ["<strong>#{time_entry_change}</strong> #{time_entry_link}"]
-          else
-            rval = details_to_strings_without_mail_shaper(details, no_html, options)
           end
 
-          rval
+          all_details = details_to_strings_without_mail_shaper(details, no_html, options)
+
+          # Time entry is not properly parsed by redmine so it leaves a nil
+          all_details.delete(nil)
+          all_details << rval unless rval.blank?
+
+          all_details
         end
 
       end

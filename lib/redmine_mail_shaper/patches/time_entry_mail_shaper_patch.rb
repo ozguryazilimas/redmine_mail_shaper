@@ -30,7 +30,7 @@ module RedmineMailShaper
         private
 
         def create_journal(for_type)
-          journal = issue.init_journal(User.current)
+          journal = issue.current_journal || issue.init_journal(User.current)
 
           # changes in associations are not considered as dirty record for self
           # so we have to fetch the data by hand
@@ -54,8 +54,15 @@ module RedmineMailShaper
                                                :old_value => obj_old_value.to_yaml)
 
           # journal.save does not trigger change for issue.updated_on
-          journal.save!
-          issue.save!
+          # but if we are creating a time_spent then we definitely know that there will be
+          # an issue.save! . We skip saving journal and issue on create, because
+          # the minute we save mail sender is triggered, and we may loose other journal
+          # details if they are not processed yet.
+
+          unless for_type == 'create'
+            journal.save!
+            issue.save!
+          end
         end
 
       end
