@@ -26,10 +26,13 @@ module RedmineMailShaper
           create_journal('delete')
         end
 
+        def create_journal_entry
+          create_journal('create', true)
+        end
 
         private
 
-        def create_journal(for_type)
+        def create_journal(for_type, force_save=false)
           journal = issue.current_journal || issue.init_journal(User.current)
 
           # changes in associations are not considered as dirty record for self
@@ -59,7 +62,7 @@ module RedmineMailShaper
           # the minute we save mail sender is triggered, and we may loose other journal
           # details if they are not processed yet.
 
-          unless for_type == 'create'
+          unless ((for_type == 'create') and !force_save)
             journal.save!
             issue.save!
           end
