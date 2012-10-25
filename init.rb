@@ -7,7 +7,7 @@ Redmine::Plugin.register :redmine_mail_shaper do
   name 'Redmine Mail Shaper plugin'
   author 'Onur Küçük'
   description 'Format and behaviour changer plugin for Redmine notification e-mails '
-  version '0.3.0'
+  version '0.4.0'
   url 'http://www.ozguryazilim.com.tr'
   author_url 'http://www.ozguryazilim.com.tr'
   requires_redmine :version_or_higher => '1.4.0' # not tested with versions below
@@ -32,6 +32,15 @@ Dispatcher.to_prepare :redmine_mail_shaper do
   end
   unless IssuesHelper.included_modules.include?(RedmineMailShaper::Patches::IssuesHelperMailShaperPatch)
     IssuesHelper.send(:include, RedmineMailShaper::Patches::IssuesHelperMailShaperPatch)
+  end
+  unless JournalObserver.included_modules.include?(RedmineMailShaper::Patches::JournalObserverMailShaperPatch)
+    JournalObserver.send(:include, RedmineMailShaper::Patches::JournalObserverMailShaperPatch)
+  end
+  unless Mailer.included_modules.include?(RedmineMailShaper::Patches::MailerMailShaperPatch)
+    Mailer.send(:include, RedmineMailShaper::Patches::MailerMailShaperPatch)
+  end
+  unless Issue.included_modules.include?(RedmineMailShaper::Patches::IssueMailShaperPatch)
+    Issue.send(:include, RedmineMailShaper::Patches::IssueMailShaperPatch)
   end
 end
 

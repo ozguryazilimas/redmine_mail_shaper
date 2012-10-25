@@ -1,0 +1,12 @@
+<%= l(:text_issue_updated, :id => "##{@issue.id}", :author => h(@journal.user)) %>
+
+<ul>
+<% journal_details = (@can_view_time_entries ? @journal.details : @journal.details.reject{|k| k.property == 'time_entry'})  %>
+<% details_to_strings(journal_details, false, :only_path => false).each do |string| %>
+  <li><%= string %></li>
+<% end %>
+</ul>
+
+<%= textilizable(@journal, :notes, :only_path => false) %>
+<hr />
+<%= render :partial => "issue.html.erb", :locals => { :issue => @issue, :issue_url => @issue_url, :can_view_time_entries => @can_view_time_entries } %>

@@ -27,40 +27,47 @@ module RedmineMailShaper
           detail = details.first
 
           if detail && detail.property == 'time_entry'
-            time_entry = TimeEntry.find_by_id(detail.prop_key)
-            time_entry_change = l("journal_entry_time_entry_#{detail.value}")
+            current_project = @project || detail.journal.project
 
-            entry_attrs = YAML.load(detail.old_value)
+            if User.current.allowed_to?(:view_time_entries, current_project)
+              time_entry = TimeEntry.find_by_id(detail.prop_key)
+              time_entry_change = l("journal_entry_time_entry_#{detail.value}")
 
-            link_value = l(:label_f_hour_plural, :value => entry_attrs['hours'])
-            link_value += no_html ? " #{entry_attrs['activity_name']}" :
-                                    " <i>#{entry_attrs['activity_name']}</i>"
-            link_value += entry_attrs['comments']
+              entry_attrs = YAML.load(detail.old_value)
 
-            if detail.value == 'update'
-              link_value_was = l(:label_f_hour_plural, :value => entry_attrs['hours_was'])
-              link_value_was += no_html ? " #{entry_attrs['activity_name_was']}" :
-                                          " <i>#{entry_attrs['activity_name_was']}</i>"
-              link_value_was += entry_attrs['comments_was']
+              link_value = l(:label_f_hour_plural, :value => entry_attrs['hours'])
+              link_value += no_html ? " #{entry_attrs['activity_name']}" :
+                                      " <i>#{entry_attrs['activity_name']}</i>"
+              link_value += entry_attrs['comments']
 
-              link_value = "#{link_value_was} -> #{link_value}"
+              if detail.value == 'update'
+                link_value_was = l(:label_f_hour_plural, :value => entry_attrs['hours_was'])
+                link_value_was += no_html ? " #{entry_attrs['activity_name_was']}" :
+                                            " <i>#{entry_attrs['activity_name_was']}</i>"
+                link_value_was += entry_attrs['comments_was']
+
+                link_value = "#{link_value_was} -> #{link_value}"
+              end
+
+              if time_entry
+                time_entry_link = no_html ? link_value :
+                                  link_to(link_value,
+                                    :controller => 'timelog',
+                                    :action => 'edit',
+                                    :issue_id => time_entry.issue_id,
+                                    :id => time_entry.id
+                                  )
+              else
+                time_entry_link = no_html ? "#{link_value} #{l(:label_deleted)}" :
+                                           "<strike><i>#{link_value} #{l(:label_deleted)}</i></strike>"
+              end
+
+              rval = no_html ? ["#{time_entry_change} #{time_entry_link}"] :
+                               ["<strong>#{time_entry_change}</strong> #{time_entry_link}"]
             end
-
-            if time_entry
-              time_entry_link = no_html ? link_value :
-                                link_to(link_value,
-                                  :controller => 'timelog',
-                                  :action => 'edit',
-                                  :issue_id => time_entry.issue_id,
-                                  :id => time_entry.id
-                                )
-            else
-              time_entry_link = no_html ? "#{link_value} #{l(:label_deleted)}" :
-                                         "<strike><i>#{link_value} #{l(:label_deleted)}</i></strike>"
-            end
-
-            rval = no_html ? ["#{time_entry_change} #{time_entry_link}"] :
-                             ["<strong>#{time_entry_change}</strong> #{time_entry_link}"]
+          else
+            # TODO: remove it when we switch to ruby 1.9.x
+            rval = nil
           end
 
           all_details = details_to_strings_without_mail_shaper(details, no_html, options)
