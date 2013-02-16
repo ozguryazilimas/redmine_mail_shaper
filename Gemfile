@@ -1,5 +1,5 @@
 source :rubygems
 
-gem "diff-lcs", "~> 1.1.3"
+gem "diff-lcs", "~> 1.2.1"
 
 
