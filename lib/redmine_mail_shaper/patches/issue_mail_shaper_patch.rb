@@ -39,10 +39,10 @@ module RedmineMailShaper
           [notified_can.collect(&:mail), notified_can_not.collect(&:mail)]
         end
 
-        # Returns an array of watchers' email addresses
+        # Returns an array of watcher email address for acts_as_watchable
         def watcher_recipients_can_view_time_entries
           notified = watcher_users.active
-          notified.reject! {|user| user.mail_notification == 'none'}
+          notified.reject! {|user| user.mail.blank? || user.mail_notification == 'none'}
 
           if respond_to?(:visible?)
             notified.reject! {|user| !visible?(user)}
