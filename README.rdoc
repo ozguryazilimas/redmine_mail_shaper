@@ -1,4 +1,5 @@
 = redmine_mail_shaper
 
 Format and behaviour changer plugin for Redmine notification e-mails.
+This branch is for Redmine 1.x versions.
 
