@@ -9,20 +9,23 @@ module RedmineMailShaper
 
         base.class_eval do
           unloadable  # to make sure plugin is loaded in development mode
+          after_create :mail_shaper_after_create
+          after_update :mail_shaper_after_update
+          after_destroy :mail_shaper_after_destroy
         end
       end
 
       module InstanceMethods
 
-        def after_create
+        def mail_shaper_after_create
           create_journal('create')
         end
 
-        def after_update
+        def mail_shaper_after_update
           create_journal('update')
         end
 
-        def after_destroy
+        def mail_shaper_after_destroy
           create_journal('delete')
         end
 
