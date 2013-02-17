@@ -39,7 +39,7 @@ module RedmineMailShaper
               link_value = l(:label_f_hour_plural, :value => entry_attrs['hours'])
               link_value += no_html ? " #{entry_attrs['activity_name']}" :
                                       " <i>#{entry_attrs['activity_name']}</i>".html_safe
-              link_value += entry_attrs['comments']
+              link_value += entry_attrs['comments'].html_safe
 
               if detail.value == 'update'
                 link_value_was = l(:label_f_hour_plural, :value => entry_attrs['hours_was'])
@@ -52,7 +52,7 @@ module RedmineMailShaper
 
               if time_entry
                 time_entry_link = no_html ? link_value :
-                                  link_to(link_value,
+                                  link_to(link_value.html_safe,
                                     :controller => 'timelog',
                                     :action => 'edit',
                                     :issue_id => time_entry.issue_id,
@@ -75,7 +75,7 @@ module RedmineMailShaper
 
           # Time entry is not properly parsed by redmine so it leaves a nil
           all_details.delete(nil)
-          all_details << rval unless rval.blank?
+          all_details << rval.html_safe unless rval.blank?
 
           all_details
         end

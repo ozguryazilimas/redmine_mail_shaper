@@ -38,7 +38,7 @@ module MailerHelper
 
     htmldiff << "</pre>" << "\n"
     Rails.logger.debug "HTMLDIFF: #{htmldiff.inspect}"
-    htmldiff
+    htmldiff.html_safe
   end
 
 end
