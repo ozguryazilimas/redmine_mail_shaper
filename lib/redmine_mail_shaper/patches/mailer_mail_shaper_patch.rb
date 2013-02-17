@@ -12,13 +12,13 @@ module RedmineMailShaper
 
           def self.mail_shaper_deliver_issue_edit(journal)
             if journal.details.select{|k| k.property == 'time_entry'}.blank?
-              deliver_issue_edit(journal)
+              issue_edit(journal).deliver
             else
-              recipients_can, recipients_can_not = journal.issue.recipients_can_view_time_entries
-              watchers_can, watchers_can_not = journal.issue.watcher_recipients_can_view_time_entries
+              recipients_can, recipients_can_not = journal.recipients_can_view_time_entries
+              watchers_can, watchers_can_not = journal.watcher_recipients_can_view_time_entries
 
-              deliver_mail_shaper_issue_edit(journal, recipients_can, watchers_can, true)
-              deliver_mail_shaper_issue_edit(journal, recipients_can_not, watchers_can_not, false)
+              mail_shaper_issue_edit(journal, recipients_can, watchers_can, true).deliver
+              mail_shaper_issue_edit(journal, recipients_can_not, watchers_can_not, false).deliver
             end
           end
 
@@ -37,19 +37,19 @@ module RedmineMailShaper
           message_id journal
           references issue
           @author = journal.user
-          recipients ms_recipients
+          recipients = ms_recipients
           # Watchers in cc
-          cc(ms_watchers - @recipients)
+          cc = ms_watchers - recipients
           s = "[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] "
           s << "(#{issue.status.name}) " if journal.new_value_for('status_id')
           s << issue.subject
-          subject s
-          body :issue => issue,
-               :journal => journal,
-               :can_view_time_entries => can_view_time_entries,
-               :issue_url => url_for(:controller => 'issues', :action => 'show', :id => issue, :anchor => "change-#{journal.id}")
-
-          render_multipart('issue_edit', body)
+          @issue = issue
+          @journal = journal
+          @issue_url = url_for(:controller => 'issues', :action => 'show', :id => issue, :anchor => "change-#{journal.id}")
+          @can_view_time_entries = can_view_time_entries
+          mail :to => recipients,
+            :cc => cc,
+            :subject => s
         end
 
       end

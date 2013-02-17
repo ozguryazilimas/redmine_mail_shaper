@@ -13,7 +13,7 @@ module RedmineMailShaper
 
       module InstanceMethods
 
-        def recipients_can_view_time_entries
+        def notified_users_can_view_time_entries
           # allowed_to?(:view_time_entries, @project)
           notified = []
           # Author and assignee are always notified unless they have been
@@ -36,11 +36,16 @@ module RedmineMailShaper
           notified_can_not = notified - notified_can
 
           # allowed_to?(:view_time_entries, @project)
+          [notified_can, notified_can_not]
+        end
+
+        def recipients_can_view_time_entries
+          notified_can, notified_can_not = notified_users_can_view_time_entries
           [notified_can.collect(&:mail), notified_can_not.collect(&:mail)]
         end
 
         # Returns an array of watcher email address for acts_as_watchable
-        def watcher_recipients_can_view_time_entries
+        def watcher_notified_users_can_view_time_entries
           notified = watcher_users.active
           notified.reject! {|user| user.mail.blank? || user.mail_notification == 'none'}
 
@@ -53,6 +58,11 @@ module RedmineMailShaper
 
           # allowed_to?(:view_time_entries, @project)
           [notified_can.collect(&:mail).compact, notified_can_not.collect(&:mail).compact]
+        end
+
+        def watcher_recipients_can_view_time_entries
+          notified_can, notified_can_not = watcher_notified_users_can_view_time_entries
+          [notified_can.collect(&:mail), notified_can_not.collect(&:mail)]
         end
 
       end

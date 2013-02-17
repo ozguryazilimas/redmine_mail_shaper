@@ -39,11 +39,14 @@ Dispatcher.to_prepare :redmine_mail_shaper do
   unless Mailer.included_modules.include?(RedmineMailShaper::Patches::MailerMailShaperPatch)
     Mailer.send(:include, RedmineMailShaper::Patches::MailerMailShaperPatch)
   end
-  unless Issue.included_modules.include?(RedmineMailShaper::Patches::IssueMailShaperPatch)
-    Issue.send(:include, RedmineMailShaper::Patches::IssueMailShaperPatch)
-  end
+#  unless Issue.included_modules.include?(RedmineMailShaper::Patches::IssueMailShaperPatch)
+#    Issue.send(:include, RedmineMailShaper::Patches::IssueMailShaperPatch)
+#  end
   unless TimelogController.included_modules.include?(RedmineMailShaper::Patches::TimelogControllerMailShaperPatch)
     TimelogController.send(:include, RedmineMailShaper::Patches::TimelogControllerMailShaperPatch)
+  end
+  unless Journal.included_modules.include?(RedmineMailShaper::Patches::JournalMailShaperPatch)
+    Journal.send(:include, RedmineMailShaper::Patches::JournalMailShaperPatch)
   end
 end
 
