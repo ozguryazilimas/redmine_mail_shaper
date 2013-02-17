@@ -16,7 +16,7 @@ module MailerHelper
       str_truncated = str_full
     end
 
-    str_truncated
+    str_truncated.html_safe
   end
 
   def convert_diff_to_html_diff(diff)
