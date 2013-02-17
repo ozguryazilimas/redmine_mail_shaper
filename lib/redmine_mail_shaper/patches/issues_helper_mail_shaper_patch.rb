@@ -16,8 +16,9 @@ module RedmineMailShaper
       module InstanceMethods
 
         def parent_issue_subject(issue)
-          if Setting[:plugin_redmine_mail_shaper][:issue_show_parent_subject] and issue.parent_issue_id
-            Issue.find_by_id(issue.parent_issue_id).subject
+          if Setting[:plugin_redmine_mail_shaper][:issue_show_parent_subject] and !issue.parent_issue_id.blank?
+            issue = Issue.find_by_id(issue.parent_issue_id)
+            issue.subject
           else
             nil
           end
