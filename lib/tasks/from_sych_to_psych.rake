@@ -2,8 +2,8 @@ require 'yaml'
 
 
 namespace :redmine_mail_shaper do
-  desc 'Convert data saved with YAML sych engine, to YAML psych engine'
-  task :from_sych_to_psych => :environment do
+  desc 'Convert data saved with YAML syck engine, to YAML psych engine'
+  task :from_syck_to_psych => :environment do
     journal_detail_time_entries = JournalDetail.all.select{|k| k.property == 'time_entry'}
     puts "Migrating #{journal_detail_time_entries.count} entries"
 
