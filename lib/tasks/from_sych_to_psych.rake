@@ -13,10 +13,14 @@ namespace :redmine_mail_shaper do
       parsed_syck = YAML.load(detail.old_value)
       activity_name = parsed_syck['activity_name'].force_encoding('UTF-8')
       activity_name_was = parsed_syck['activity_name_was'].force_encoding('UTF-8')
+      comments = parsed_syck['comments'].force_encoding('UTF-8')
+      comments_was = parsed_syck['comments_was'].force_encoding('UTF-8')
 
       use_psych
       parsed_syck['activity_name'] = activity_name
       parsed_syck['activity_name_was'] = activity_name_was
+      parsed_syck['comments'] = comments
+      parsed_syck['comments_was'] = comments_was
       parsed_psych = parsed_syck.to_yaml
 
       detail.old_value = parsed_psych
