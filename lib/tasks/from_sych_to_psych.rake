@@ -4,7 +4,7 @@ require 'yaml'
 namespace :redmine_mail_shaper do
   desc 'Convert data saved with YAML syck engine, to YAML psych engine'
   task :from_syck_to_psych => :environment do
-    journal_detail_time_entries = JournalDetail.all.select{|k| k.property == 'time_entry'}
+    journal_detail_time_entries = JournalDetail.where(:property => 'time_entry')
     puts "Migrating #{journal_detail_time_entries.count} entries"
 
     journal_detail_time_entries.each do |detail|
@@ -26,11 +26,8 @@ namespace :redmine_mail_shaper do
 
   desc 'Check syck to psych data conversion'
   task :check_syck_to_psych => :environment do
-    journal_detail_time_entries = JournalDetail.all.select{|k| k.property == 'time_entry'}
-    puts "Checking #{journal_detail_time_entries.count} entries"
-
-    binary_data = journal_detail_time_entries.select {|k| k.old_value =~ /!binary/}
-    utf8_as_ascii = journal_detail_time_entries.select {|k| k.old_value =~ /\\x/}
+    binary_data = JournalDetail.where(:property => 'time_entry').where("old_value like ?", "%!binary%")
+    utf8_as_ascii = JournalDetail.where(:property => 'time_entry').where("old_value like ?", "%\\x%")
 
     unless binary_data.blank?
       puts 'Binary data found'
