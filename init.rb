@@ -18,7 +18,11 @@ Redmine::Plugin.register :redmine_mail_shaper do
       :wiki_diff_on_create => 0,
       :issue_show_parent_subject => 0,
       :diff_hunk_line_size => 2,
-      :diff_max_lines_displayed => 50
+      :diff_max_lines_displayed => 50,
+      :suppress_email_for_attachment => 0,
+      :suppress_email_for_time_entry => 0,
+      :suppress_email_for_cf => [],
+      :suppress_email_for_attr => []
   }
 
 end
