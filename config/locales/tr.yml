@@ -6,6 +6,7 @@ tr:
   setting_diff_hunk_line_size: "Farkların etrafındaki satır sayısı"
   label_difference_settings: "Fark ayarları"
   label_add_to_notification_mails: "Uyarı postalarına ekler"
+  label_suppress_email: "İş kaydında tek bir değişiklik varsa ve aşağıdakilerden biri ise e-posta gönderme"
   text_zero_to_disable: "Kapatmak için sıfır değeri (0) giriniz"
 
   journal_entry_time_entry_create: "Yeni harcanan zaman"

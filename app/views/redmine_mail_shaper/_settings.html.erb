@@ -29,3 +29,35 @@
     </p>
   </div>
 </fieldset>
+
+<%
+  detail_attr_prop_keys = JournalDetail.where(:property => 'attr').collect(&:prop_key).uniq
+  issue_attr_pair = detail_attr_prop_keys.map {|k| [l(('field_' + k.to_s.gsub(/\_id$/, '')).to_sym), k] }
+  cf_names = CustomField.all.collect(&:name).uniq
+%>
+
+<fieldset><legend><%=h l(:label_suppress_email) %></legend>
+  <div class="box tabular settings">
+    <p>
+      <%= content_tag :label, l(:label_time_entry_plural) %>
+      <%= check_box_tag 'settings[suppress_email_for_time_entry]', 1, settings[:suppress_email_for_time_entry] %>
+    </p>
+    <p>
+      <%= content_tag :label, l(:label_attachment_plural) %>
+      <%= check_box_tag 'settings[suppress_email_for_attachment]', 1, settings[:suppress_email_for_attachment] %>
+    </p>
+    <p>
+      <%= content_tag :label, l(:label_attribute_plural) %>
+      <%= select_tag 'settings[suppress_email_for_attr]',
+        options_for_select(issue_attr_pair, settings[:suppress_email_for_attr]), :size => 10, :multiple => true %>
+    </p>
+    <% unless cf_names.blank? %>
+      <p>
+        <%= content_tag :label, l(:label_custom_field_plural) %>
+        <%= select_tag 'settings[suppress_email_for_cf]',
+          options_for_select(cf_names, settings[:suppress_email_for_cf]), :size => 10, :multiple => true %>
+      </p>
+    <% end %>
+  </div>
+</fieldset>
+
