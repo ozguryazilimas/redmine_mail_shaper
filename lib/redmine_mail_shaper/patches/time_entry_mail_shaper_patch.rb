@@ -36,6 +36,23 @@ module RedmineMailShaper
         private
 
         def create_journal(for_type, force_save=false)
+          issue ? create_journal_for_issue(for_type, force_save) :
+                  send_mail_for_entry(for_type, force_save)
+        end
+
+        def send_mail_for_entry(for_type, force_save)
+          # We do not suppress email here since that setting is for issue changes only
+          notified = project.notified_users.select {|k| k.allowed_to?(:view_time_entries, project)}
+          activity_old = TimeEntryActivity.find(activity_id_was).name_was rescue ''
+
+          Mailer.time_entry_edit(self,
+                                 for_type,
+                                 notified.collect(&:mail),
+                                 activity_old
+          ).deliver
+        end
+
+        def create_journal_for_issue(for_type, force_save)
           journal = issue.current_journal || issue.init_journal(User.current)
 
           # changes in associations are not considered as dirty record for self

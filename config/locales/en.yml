@@ -13,3 +13,5 @@ en:
   journal_entry_time_entry_delete: "Spent time deleted"
   journal_entry_time_entry_update: "Spent time updated"
 
+  label_time_entry_change_by: "Time entry change by %{author}"
+

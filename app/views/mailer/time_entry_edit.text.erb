@@ -1,0 +1,8 @@
+<%= l(:label_time_entry_change_by, :author => h(@author.name)) %>
+<%= @time_entry_url%>
+
+<%= l(:label_project) %>: <%= @time_entry.project.name %>
+<%= l(:field_author) %>: <%= @author.name %>
+<%= l("journal_entry_time_entry_#{@for_type}") %>: <% if @for_type == 'update' %><%= l(:label_f_hour_plural, :value => @hours_was) %> <%= @activity_name_was %> -> <% end %><%= l(:label_f_hour_plural, :value => @hours) %> <%= @activity_name %>
+<%= l(:label_comment) %>:<% if @for_type == 'update' %> <%= @comments_was %> -><% end %><% unless @comments.blank? %> <%= @comments %><% end %>
+

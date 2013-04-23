@@ -52,6 +52,25 @@ module RedmineMailShaper
             :subject => s
         end
 
+        def time_entry_edit(time_entry, for_type, notified, activity_name_was)
+          redmine_headers 'Project' => time_entry.project.identifier
+          @author = time_entry.user
+          message_id time_entry
+
+          @time_entry = time_entry
+          @for_type = for_type
+          @time_entry_url = url_for(:controller => 'timelog', :action => 'edit', :id => time_entry.id)
+          @activity_name = time_entry.activity.name
+          @activity_name_was = activity_name_was
+          @comments = time_entry.comments
+          @comments_was = time_entry.comments_was
+          @hours = time_entry.hours
+          @hours_was = time_entry.hours_was
+
+          mail :to => notified,
+            :subject => "[#{time_entry.project.name}] " + l("journal_entry_time_entry_#{for_type}")
+        end
+
       end
     end
   end
