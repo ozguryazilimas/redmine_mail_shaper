@@ -43,6 +43,7 @@ module RedmineMailShaper
         def send_mail_for_entry(for_type, force_save)
           # We do not suppress email here since that setting is for issue changes only
           notified = project.notified_users.select {|k| k.allowed_to?(:view_time_entries, project)}
+          notified.uniq!
           activity_old = TimeEntryActivity.find(activity_id_was).name_was rescue ''
 
           Mailer.time_entry_edit(self,
