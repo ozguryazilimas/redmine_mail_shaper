@@ -44,10 +44,14 @@ module RedmineMailShaper
             when 'time_entry'
               ret = settings[:suppress_email_for_time_entry]
             when 'attr'
-              ret = settings[:suppress_email_for_attr].include? detail.prop_key
+              unless settings[:suppress_email_for_attr].blank?
+                ret = settings[:suppress_email_for_attr].include? detail.prop_key
+              end
             when 'cf'
-              custom_field = CustomField.find_by_id(detail.prop_key)
-              ret = settings[:suppress_email_for_cf].include? custom_field.name
+              unless settings[:suppress_email_for_cf].blank?
+                custom_field = CustomField.find_by_id(detail.prop_key)
+                ret = settings[:suppress_email_for_cf].include? custom_field.name
+              end
             end
 
           end
