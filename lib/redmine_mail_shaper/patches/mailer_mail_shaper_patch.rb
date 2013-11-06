@@ -22,18 +22,44 @@ module RedmineMailShaper
             end
           end
 
+          # default issue_edit with updated headers
+          def issue_edit(journal)
+            issue = journal.journalized.reload
+            redmine_headers 'Project' => issue.project.identifier,
+                            'Issue-Id' => issue.id,
+                            'Issue-Author' => issue.author.login
+            redmine_headers 'Issue-Assignee' => issue.assigned_to.login if issue.assigned_to
+            redmine_headers 'Issue-Edit-Has-Note' => (journal.notes.blank? ? 'No' : 'Yes')
+            message_id journal
+            references issue
+            @author = journal.user
+            recipients = journal.recipients
+            # Watchers in cc
+            cc = journal.watcher_recipients - recipients
+            s = "[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] "
+            s << "(#{issue.status.name}) " if journal.new_value_for('status_id')
+            s << issue.subject
+            @issue = issue
+            @journal = journal
+            @issue_url = url_for(:controller => 'issues', :action => 'show', :id => issue, :anchor => "change-#{journal.id}")
+            mail :to => recipients,
+              :cc => cc,
+              :subject => s
+          end
+
         end
       end
 
       module InstanceMethods
 
-        # Builds a tmail object used to email recipients of the edited issue.
+        # Builds a tmail object used to email recipients of the edited issue. Called only on time_entry changes
         def mail_shaper_issue_edit(journal, ms_recipients, ms_watchers, can_view_time_entries)
           issue = journal.journalized.reload
           redmine_headers 'Project' => issue.project.identifier,
                           'Issue-Id' => issue.id,
                           'Issue-Author' => issue.author.login
           redmine_headers 'Issue-Assignee' => issue.assigned_to.login if issue.assigned_to
+          redmine_headers 'Issue-Edit-Has-Note' => (journal.notes.blank? ? 'No' : 'Yes')
           message_id journal
           references issue
           @author = journal.user
