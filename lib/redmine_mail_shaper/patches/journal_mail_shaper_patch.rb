@@ -38,14 +38,14 @@ module RedmineMailShaper
           [notified_can.map(&:mail), notified_can_not.map(&:mail)]
         end
 
-        def send_notification_with_mail_shaper(journal)
+        def send_notification_with_mail_shaper
           if notify? && (Setting.notified_events.include?('issue_updated') ||
               (Setting.notified_events.include?('issue_note_added') && notes.present?) ||
               (Setting.notified_events.include?('issue_status_updated') && new_status.present?) ||
               (Setting.notified_events.include?('issue_priority_updated') && new_value_for('priority_id').present?)
             )
             # Mailer.deliver_issue_edit(self)
-            Mailer.mail_shaper_deliver_issue_edit(self) unless should_not_send_email(journal)
+            Mailer.mail_shaper_deliver_issue_edit(self) unless should_not_send_email(self)
           end
         end
 

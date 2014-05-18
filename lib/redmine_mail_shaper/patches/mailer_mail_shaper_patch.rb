@@ -12,7 +12,7 @@ module RedmineMailShaper
 
           def self.mail_shaper_deliver_issue_edit(journal)
             if journal.details.select{|k| k.property == 'time_entry'}.blank?
-              issue_edit(journal).deliver
+              self.deliver_issue_edit(journal)
             else
               recipients_can, recipients_can_not = journal.recipients_can_view_time_entries
               watchers_can, watchers_can_not = journal.watcher_recipients_can_view_time_entries
@@ -23,7 +23,7 @@ module RedmineMailShaper
           end
 
           # default issue_edit with updated headers
-          def issue_edit(journal)
+          def issue_edit(journal, to_users, cc_users)
             issue = journal.journalized.reload
             redmine_headers 'Project' => issue.project.identifier,
                             'Issue-Id' => issue.id,
@@ -33,20 +33,18 @@ module RedmineMailShaper
             message_id journal
             references issue
             @author = journal.user
-            recipients = journal.recipients
-            # Watchers in cc
-            cc = journal.watcher_recipients - recipients
             s = "[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] "
             s << "(#{issue.status.name}) " if journal.new_value_for('status_id')
             s << issue.subject
             @issue = issue
+            @users = to_users + cc_users
             @journal = journal
+            @journal_details = journal.visible_details(@users.first)
             @issue_url = url_for(:controller => 'issues', :action => 'show', :id => issue, :anchor => "change-#{journal.id}")
-            mail :to => recipients,
-              :cc => cc,
+            mail :to => to_users.map(&:mail),
+              :cc => cc_users.map(&:mail),
               :subject => s
           end
-
         end
       end
 
@@ -64,6 +62,7 @@ module RedmineMailShaper
           references issue
           @author = journal.user
           recipients = ms_recipients
+          @users = recipients
           # Watchers in cc
           cc = ms_watchers - recipients
           s = "[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] "
@@ -71,6 +70,7 @@ module RedmineMailShaper
           s << issue.subject
           @issue = issue
           @journal = journal
+          @journal_details = journal.visible_details(User.where(:mail => @users.first).first)
           @issue_url = url_for(:controller => 'issues', :action => 'show', :id => issue, :anchor => "change-#{journal.id}")
           @can_view_time_entries = can_view_time_entries
           mail :to => recipients,
