@@ -17,6 +17,13 @@ module RedmineMailShaper
               recipients_can, recipients_can_not = journal.recipients_can_view_time_entries
               watchers_can, watchers_can_not = journal.watcher_recipients_can_view_time_entries
 
+              # if there is only time_entry on issue/edit change make sure we do not send blank
+              # emails to recipients who should not see time entries
+              if journal.notes.blank? && journal.details.reject{|k| k.property == 'time_entry'}.count == 0
+                wachers_can_not = []
+                recipients_can_not = []
+              end
+
               mail_shaper_issue_edit(journal, recipients_can, watchers_can, true).deliver
               mail_shaper_issue_edit(journal, recipients_can_not, watchers_can_not, false).deliver
             end
