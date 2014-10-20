@@ -55,7 +55,12 @@ module RedmineMailShaper
 
         def create_journal_for_issue(for_type, force_save)
           # try really hard not to create entries for anonymous users
-          init_journal_user = User.current == User.anonymous ? user : User.current
+          init_journal_user = User.current
+
+          if (init_journal_user == User.anonymous) && user
+            init_journal_user = user
+          end
+
           journal = issue.current_journal || issue.init_journal(init_journal_user)
 
           # changes in associations are not considered as dirty record for self
