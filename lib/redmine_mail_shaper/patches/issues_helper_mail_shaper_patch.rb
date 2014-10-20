@@ -30,7 +30,7 @@ module RedmineMailShaper
           if detail && detail.property == 'time_entry'
             current_project = @project || detail.journal.project
 
-            if User.current.allowed_to?(:view_time_entries, current_project)
+            if options[:should_force_time_entry_view] || User.current.allowed_to?(:view_time_entries, current_project)
               time_entry = TimeEntry.find_by_id(detail.prop_key)
               time_entry_change = l("journal_entry_time_entry_#{detail.value}")
 

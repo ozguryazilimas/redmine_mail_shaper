@@ -1,6 +1,6 @@
 <%= l(:text_issue_updated, :id => "##{@issue.id}", :author => @journal.user) %>
 <% journal_details = (@can_view_time_entries ? @journal.details : @journal.details.reject{|k| k.property == 'time_entry'})  %>
-<% details_to_strings(journal_details, true).each do |string| -%>
+<% details_to_strings(journal_details, true, {:should_force_time_entry_view => true}).each do |string| -%>
 <%= string %>
 <% end -%>
 

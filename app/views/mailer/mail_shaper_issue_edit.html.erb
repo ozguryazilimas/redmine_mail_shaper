@@ -2,7 +2,7 @@
 
 <ul>
 <% journal_details = (@can_view_time_entries ? @journal.details : @journal.details.reject{|k| k.property == 'time_entry'})  %>
-<% details_to_strings(journal_details, false, :only_path => false).each do |string| %>
+<% details_to_strings(journal_details, false, {:only_path => false, :should_force_time_entry_view => true}).each do |string| %>
   <li><%= string %></li>
 <% end %>
 </ul>
