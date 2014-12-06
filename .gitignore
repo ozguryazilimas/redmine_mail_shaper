@@ -1,1 +1,9 @@
+
+# temporary editor files
 *.swp
+*~
+.DS_Store
+.idea/
+.env
+
+
