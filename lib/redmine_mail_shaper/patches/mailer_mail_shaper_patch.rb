@@ -11,21 +11,43 @@ module RedmineMailShaper
           unloadable  # to make sure plugin is loaded in development mode
 
           def self.mail_shaper_deliver_issue_edit(journal)
-            if journal.details.select{|k| k.property == 'time_entry'}.blank?
+            if journal.details.select{|k| (k.property == 'time_entry') || (k.prop_key == 'estimated_hours')}.blank?
               self.deliver_issue_edit(journal)
             else
-              recipients_can, recipients_can_not = journal.recipients_can_view_time_entries
-              watchers_can, watchers_can_not = journal.watcher_recipients_can_view_time_entries
+              recipient_users = journal.recipients_can_view_time_entries
+              watcher_users = journal.watcher_recipients_can_view_time_entries
 
               # if there is only time_entry on issue/edit change make sure we do not send blank
               # emails to recipients who should not see time entries
-              if journal.notes.blank? && journal.details.reject{|k| k.property == 'time_entry'}.count == 0
-                wachers_can_not = []
-                recipients_can_not = []
+              if journal.notes.blank?
+                if journal.details.reject{|k| k.property == 'time_entry'}.count == 0
+                  recipient_users[:can_not_time_entry][:can_estimated_time] = []
+                  recipient_users[:can_not_time_entry][:can_not_estimated_time] = []
+
+                  watcher_users[:can_not_time_entry][:can_estimated_time] = []
+                  watcher_users[:can_not_time_entry][:can_not_estimated_time] = []
+                end
+
+                if journal.details.reject{|k| k.prop_key == 'estimated_hours'}.count == 0
+                  recipient_users[:can_time_entry][:can_not_estimated_time] = []
+                  recipient_users[:can_not_time_entry][:can_not_estimated_time] = []
+
+                  watcher_users[:can_time_entry][:can_not_estimated_time] = []
+                  watcher_users[:can_not_time_entry][:can_not_estimated_time] = []
+                end
               end
 
-              mail_shaper_issue_edit(journal, recipients_can, watchers_can, true).deliver
-              mail_shaper_issue_edit(journal, recipients_can_not, watchers_can_not, false).deliver
+              recipient_users.each do |time_entry_key, subhash|
+                subhash.each do |estimated_time_key, val|
+                  mail_shaper_issue_edit(
+                    journal,
+                    recipient_users[time_entry_key][estimated_time_key],
+                    watcher_users[time_entry_key][estimated_time_key],
+                    time_entry_key == :can_time_entry,
+                    estimated_time_key == :can_estimated_time
+                  ).deliver
+                end
+              end
             end
           end
 
@@ -58,7 +80,7 @@ module RedmineMailShaper
       module InstanceMethods
 
         # Builds a tmail object used to email recipients of the edited issue. Called only on time_entry changes
-        def mail_shaper_issue_edit(journal, ms_recipients, ms_watchers, can_view_time_entries)
+        def mail_shaper_issue_edit(journal, ms_recipients, ms_watchers, can_view_time_entries, can_view_estimated_time)
           issue = journal.journalized.reload
           redmine_headers 'Project' => issue.project.identifier,
                           'Issue-Id' => issue.id,
@@ -80,6 +102,7 @@ module RedmineMailShaper
           @journal_details = journal.visible_details(User.where(:mail => @users.first).first)
           @issue_url = url_for(:controller => 'issues', :action => 'show', :id => issue, :anchor => "change-#{journal.id}")
           @can_view_time_entries = can_view_time_entries
+          @can_view_estimated_time = can_view_estimated_time
           mail :to => recipients,
             :cc => cc,
             :subject => s

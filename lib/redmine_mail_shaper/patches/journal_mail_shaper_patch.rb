@@ -15,27 +15,11 @@ module RedmineMailShaper
       module InstanceMethods
 
         def recipients_can_view_time_entries
-          notified = journalized.notified_users
-          if private_notes?
-            notified = notified.select {|user| user.allowed_to?(:view_private_notes, journalized.project)}
-          end
-
-          notified_can = notified.select {|k| k.allowed_to?(:view_time_entries, journalized.project)}
-          notified_can_not = notified - notified_can
-
-          [notified_can.map(&:mail), notified_can_not.map(&:mail)]
+          split_users_by_permission(journalized.notified_users, private_notes?)
         end
 
         def watcher_recipients_can_view_time_entries
-          notified = journalized.notified_watchers
-          if private_notes?
-            notified = notified.select {|user| user.allowed_to?(:view_private_notes, journalized.project)}
-          end
-
-          notified_can = notified.select {|k| k.allowed_to?(:view_time_entries, journalized.project)}
-          notified_can_not = notified - notified_can
-
-          [notified_can.map(&:mail), notified_can_not.map(&:mail)]
+          split_users_by_permission(journalized.notified_watchers, private_notes?)
         end
 
         def send_notification_with_mail_shaper
@@ -82,6 +66,40 @@ module RedmineMailShaper
           ret
         end
 
+        def split_users_by_permission(user_list, for_private_note)
+          resp = {
+            :can_time_entry => {
+              :can_estimated_time => [],
+              :can_not_estimated_time => []
+            },
+            :can_not_time_entry => {
+              :can_estimated_time => [],
+              :can_not_estimated_time => []
+            }
+          }
+
+          proj = journalized.project
+
+          user_list.each do |user|
+            if !for_private_note || user.rms_can_view_private_notes(proj)
+              if user.rms_can_view_time_entries(proj)
+                if user.rms_can_view_estimated_time(proj)
+                  resp[:can_time_entry][:can_estimated_time] << user.mail
+                else
+                  resp[:can_time_entry][:can_not_estimated_time] << user.mail
+                end
+              else
+                if user.rms_can_view_estimated_time(proj)
+                  resp[:can_not_time_entry][:can_estimated_time] << user.mail
+                else
+                  resp[:can_not_time_entry][:can_not_estimated_time] << user.mail
+                end
+              end
+            end
+          end
+
+          resp
+        end
 
       end
     end

@@ -50,6 +50,9 @@ Rails.configuration.to_prepare do
   unless Journal.included_modules.include?(RedmineMailShaper::Patches::JournalMailShaperPatch)
     Journal.send(:include, RedmineMailShaper::Patches::JournalMailShaperPatch)
   end
+  unless User.included_modules.include?(RedmineMailShaper::Patches::UserMailShaperPatch)
+    User.send(:include, RedmineMailShaper::Patches::UserMailShaperPatch)
+  end
 end
 
 

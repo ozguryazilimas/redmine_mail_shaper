@@ -2,6 +2,7 @@
 
 <ul>
 <% journal_details = (@can_view_time_entries ? @journal.details : @journal.details.reject{|k| k.property == 'time_entry'})  %>
+<% journal_details.reject!{|k| k.prop_key == 'estimated_hours'} unless @can_view_estimated_time %>
 <% details_to_strings(journal_details, false, {:only_path => false, :should_force_time_entry_view => true}).each do |string| %>
   <li><%= string %></li>
 <% end %>
