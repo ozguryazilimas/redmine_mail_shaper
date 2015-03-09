@@ -35,15 +35,9 @@ Rails.configuration.to_prepare do
   unless IssuesHelper.included_modules.include?(RedmineMailShaper::Patches::IssuesHelperMailShaperPatch)
     IssuesHelper.send(:include, RedmineMailShaper::Patches::IssuesHelperMailShaperPatch)
   end
-#  unless JournalObserver.included_modules.include?(RedmineMailShaper::Patches::JournalObserverMailShaperPatch)
-#    JournalObserver.send(:include, RedmineMailShaper::Patches::JournalObserverMailShaperPatch)
-#  end
   unless Mailer.included_modules.include?(RedmineMailShaper::Patches::MailerMailShaperPatch)
     Mailer.send(:include, RedmineMailShaper::Patches::MailerMailShaperPatch)
   end
-#  unless Issue.included_modules.include?(RedmineMailShaper::Patches::IssueMailShaperPatch)
-#    Issue.send(:include, RedmineMailShaper::Patches::IssueMailShaperPatch)
-#  end
   unless TimelogController.included_modules.include?(RedmineMailShaper::Patches::TimelogControllerMailShaperPatch)
     TimelogController.send(:include, RedmineMailShaper::Patches::TimelogControllerMailShaperPatch)
   end
