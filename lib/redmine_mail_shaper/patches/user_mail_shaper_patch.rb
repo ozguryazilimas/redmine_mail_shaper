@@ -1,5 +1,6 @@
 require_dependency 'user'
 
+
 module RedmineMailShaper
   module Patches
     module UserMailShaperPatch

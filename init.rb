@@ -1,4 +1,3 @@
-require 'redmine'
 require 'redmine_mail_shaper'
 require 'unified_diff'
 
@@ -27,26 +26,20 @@ Redmine::Plugin.register :redmine_mail_shaper do
 
 end
 
-
 Rails.configuration.to_prepare do
-  unless TimeEntry.included_modules.include?(RedmineMailShaper::Patches::TimeEntryMailShaperPatch)
-    TimeEntry.send(:include, RedmineMailShaper::Patches::TimeEntryMailShaperPatch)
+  [
+    [IssuesHelper, RedmineMailShaper::Patches::IssuesHelperMailShaperPatch],
+    [TimeEntry, RedmineMailShaper::Patches::TimeEntryMailShaperPatch],
+    [Mailer, RedmineMailShaper::Patches::MailerMailShaperPatch],
+    [TimelogController, RedmineMailShaper::Patches::TimelogControllerMailShaperPatch],
+    [Journal, RedmineMailShaper::Patches::JournalMailShaperPatch],
+    [User, RedmineMailShaper::Patches::UserMailShaperPatch],
+    [Issue, RedmineMailShaper::Patches::IssueMailShaperPatch]
+  ].each do |classname, modulename|
+    unless classname.included_modules.include?(modulename)
+      classname.send(:include, modulename)
+    end
   end
-  unless IssuesHelper.included_modules.include?(RedmineMailShaper::Patches::IssuesHelperMailShaperPatch)
-    IssuesHelper.send(:include, RedmineMailShaper::Patches::IssuesHelperMailShaperPatch)
-  end
-  unless Mailer.included_modules.include?(RedmineMailShaper::Patches::MailerMailShaperPatch)
-    Mailer.send(:include, RedmineMailShaper::Patches::MailerMailShaperPatch)
-  end
-  unless TimelogController.included_modules.include?(RedmineMailShaper::Patches::TimelogControllerMailShaperPatch)
-    TimelogController.send(:include, RedmineMailShaper::Patches::TimelogControllerMailShaperPatch)
-  end
-  unless Journal.included_modules.include?(RedmineMailShaper::Patches::JournalMailShaperPatch)
-    Journal.send(:include, RedmineMailShaper::Patches::JournalMailShaperPatch)
-  end
-  unless User.included_modules.include?(RedmineMailShaper::Patches::UserMailShaperPatch)
-    User.send(:include, RedmineMailShaper::Patches::UserMailShaperPatch)
-  end
-end
 
+end
 

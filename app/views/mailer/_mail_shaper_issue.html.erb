@@ -1,7 +1,7 @@
 <h1><%= link_to(h("#{issue.tracker.name} ##{issue.id}: #{issue.subject}"), issue_url) %></h1>
 
 <ul>
-<% parent_subject = parent_issue_subject(issue) %>
+<% parent_subject = issue.rms_parent_issue_subject %>
 <% unless parent_subject.blank? %><li><%= l(:field_parent_issue) %>: <%=h parent_subject %></li><% end %>
 <li><%=l(:field_author)%>: <%=h issue.author %></li>
 <li><%=l(:field_status)%>: <%=h issue.status %></li>

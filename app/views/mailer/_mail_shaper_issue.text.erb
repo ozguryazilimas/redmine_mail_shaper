@@ -1,6 +1,6 @@
 <%= "#{issue.tracker.name} ##{issue.id}: #{issue.subject}" %>
 <%= issue_url %>
-<% parent_subject = parent_issue_subject(issue) %>
+<% parent_subject = issue.rms_parent_issue_subject %>
 <% unless parent_subject.blank? %>* <%= l(:field_parent_issue) %>: <%= parent_subject %><% end %>
 * <%=l(:field_author)%>: <%= issue.author %>
 * <%=l(:field_status)%>: <%= issue.status %>

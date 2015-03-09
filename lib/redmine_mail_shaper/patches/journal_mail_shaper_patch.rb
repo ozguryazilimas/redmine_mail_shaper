@@ -1,5 +1,6 @@
 require_dependency 'journal'
 
+
 module RedmineMailShaper
   module Patches
     module JournalMailShaperPatch
