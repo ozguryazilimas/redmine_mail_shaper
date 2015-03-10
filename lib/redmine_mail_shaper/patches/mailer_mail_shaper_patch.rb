@@ -20,20 +20,29 @@ module RedmineMailShaper
               # if there is only time_entry on issue/edit change make sure we do not send blank
               # emails to recipients who should not see time entries
               if journal.notes.blank?
-                if journal.details.reject{|k| k.property == 'time_entry'}.count == 0
-                  recipient_users[:can_not_time_entry][:can_estimated_time] = []
-                  recipient_users[:can_not_time_entry][:can_not_estimated_time] = []
+                jd_all = journal.details
+                jd_time_entry = jd_all.select{|k| k.property == 'time_entry'}
+                jd_estimated_time = jd_all.select{|k| k.prop_key == 'estimated_hours'}
 
-                  watcher_users[:can_not_time_entry][:can_estimated_time] = []
-                  watcher_users[:can_not_time_entry][:can_not_estimated_time] = []
-                end
+                # if we have anything other than time entry or estimated time, send the mail
+                # if we only have time entry, skip the ones can not see time entry
+                # if we only have estimated time, skip the ones can not see estimated time
+                if (jd_all - jd_time_entry - jd_estimated_time).count == 0
+                  if (jd_all - jd_time_entry).count == 0
+                    recipient_users[:can_not_time_entry][:can_estimated_time] = []
+                    recipient_users[:can_not_time_entry][:can_not_estimated_time] = []
 
-                if journal.details.reject{|k| k.prop_key == 'estimated_hours'}.count == 0
-                  recipient_users[:can_time_entry][:can_not_estimated_time] = []
-                  recipient_users[:can_not_time_entry][:can_not_estimated_time] = []
+                    watcher_users[:can_not_time_entry][:can_estimated_time] = []
+                    watcher_users[:can_not_time_entry][:can_not_estimated_time] = []
+                  end
 
-                  watcher_users[:can_time_entry][:can_not_estimated_time] = []
-                  watcher_users[:can_not_time_entry][:can_not_estimated_time] = []
+                  if (jd_all - jd_estimated_time).count == 0
+                    recipient_users[:can_time_entry][:can_not_estimated_time] = []
+                    recipient_users[:can_not_time_entry][:can_not_estimated_time] = []
+
+                    watcher_users[:can_time_entry][:can_not_estimated_time] = []
+                    watcher_users[:can_not_time_entry][:can_not_estimated_time] = []
+                  end
                 end
               end
 
