@@ -16,6 +16,7 @@ module RedmineMailShaper
             else
               recipient_users = journal.recipients_can_view_time_entries
               watcher_users = journal.watcher_recipients_can_view_time_entries
+              all_langs = (recipient_users[:language].keys + watcher_users[:language].keys).uniq
 
               # if there is only time_entry on issue/edit change make sure we do not send blank
               # emails to recipients who should not see time entries
@@ -46,22 +47,63 @@ module RedmineMailShaper
                 end
               end
 
-              recipient_users.each do |time_entry_key, subhash|
+              @language_without_mail_shaper = current_language
+
+              # make sure we do not use the language key on iterating through recipient types
+              recipient_users.except(:language).each do |time_entry_key, subhash|
                 subhash.each do |estimated_time_key, val|
-                  mail_shaper_issue_edit(
-                    journal,
-                    recipient_users[time_entry_key][estimated_time_key],
-                    watcher_users[time_entry_key][estimated_time_key],
-                    time_entry_key == :can_time_entry,
-                    estimated_time_key == :can_estimated_time
-                  ).deliver
+                  selected_recipients = recipient_users[time_entry_key][estimated_time_key]
+                  selected_watchers = watcher_users[time_entry_key][estimated_time_key]
+
+                  all_langs.each do |lang|
+                    recipient_with_lang = (recipient_users[:language][lang] || []) & (selected_recipients || [])
+                    watcher_with_lang = (watcher_users[:language][lang] || []) & (selected_watchers || [])
+
+                    if recipient_with_lang.present? || watcher_with_lang.present?
+                      # setting language here does not affect email rendering language, no soup for you
+                      # set_language_if_valid lang
+
+                      mail_shaper_issue_edit(
+                        journal,
+                        recipient_with_lang,
+                        watcher_with_lang,
+                        time_entry_key == :can_time_entry,
+                        estimated_time_key == :can_estimated_time,
+                        lang
+                      ).deliver
+                    end
+                  end
                 end
               end
+
+              set_language_if_valid @language_without_mail_shaper
             end
           end
 
-          # default issue_edit with updated headers
-          def issue_edit(journal, to_users, cc_users)
+          # default issue add with lang support
+          def issue_add(issue, to_users, cc_users, lang = nil)
+            set_language_if_valid(lang) if lang.present?
+
+            redmine_headers 'Project' => issue.project.identifier,
+                            'Issue-Id' => issue.id,
+                            'Issue-Author' => issue.author.login
+            redmine_headers 'Issue-Assignee' => issue.assigned_to.login if issue.assigned_to
+            message_id issue
+            references issue
+            @author = issue.author
+            @issue = issue
+            @users = to_users + cc_users
+            @issue_url = url_for(:controller => 'issues', :action => 'show', :id => issue)
+            mail :to => to_users.map(&:mail),
+              :cc => cc_users.map(&:mail),
+              :subject => "[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] (#{issue.status.name}) #{issue.subject}"
+          end
+
+
+          # default issue_edit with updated headers and lang support
+          def issue_edit(journal, to_users, cc_users, lang = nil)
+            set_language_if_valid(lang) if lang.present?
+
             issue = journal.journalized.reload
             redmine_headers 'Project' => issue.project.identifier,
                             'Issue-Id' => issue.id,
@@ -83,13 +125,63 @@ module RedmineMailShaper
               :cc => cc_users.map(&:mail),
               :subject => s
           end
+
+          # override mailer methods to send users email in their language
+          def self.deliver_issue_edit(journal)
+            issue = journal.journalized.reload
+            to_raw = journal.notified_users
+            cc_raw = journal.notified_watchers - to_raw
+
+            all_langs = (to_raw + cc_raw).map(&:language).uniq
+            @language_without_mail_shaper = current_language
+
+            all_langs.each do |lang|
+              to = to_raw.select{|k| k.language == lang}
+              cc = cc_raw.select{|k| k.language == lang}
+
+              if (to + cc).present?
+                journal.each_notification(to + cc) do |users|
+                  issue.each_notification(users) do |users2|
+                    Mailer.issue_edit(journal, to & users2, cc & users2, lang).deliver
+                  end
+                end
+              end
+            end
+
+            set_language_if_valid @language_without_mail_shaper
+          end
+
+          # override mailer methods to send users email in their language
+          def self.deliver_issue_add(issue)
+            to_raw = issue.notified_users
+            cc_raw = issue.notified_watchers - to_raw
+
+            all_langs = (to_raw + cc_raw).map(&:language).uniq
+            @language_without_mail_shaper = current_language
+
+            all_langs.each do |lang|
+              to = to_raw.select{|k| k.language == lang}
+              cc = cc_raw.select{|k| k.language == lang}
+
+              if (to + cc).present?
+                issue.each_notification(to + cc) do |users|
+                  Mailer.issue_add(issue, to & users, cc & users, lang).deliver
+                end
+              end
+            end
+
+            set_language_if_valid @language_without_mail_shaper
+          end
+
         end
       end
 
       module InstanceMethods
 
         # Builds a tmail object used to email recipients of the edited issue. Called only on time_entry changes
-        def mail_shaper_issue_edit(journal, ms_recipients, ms_watchers, can_view_time_entries, can_view_estimated_time)
+        def mail_shaper_issue_edit(journal, ms_recipients, ms_watchers, can_view_time_entries, can_view_estimated_time, lang = nil)
+          set_language_if_valid(lang) if lang.present?
+
           issue = journal.journalized.reload
           redmine_headers 'Project' => issue.project.identifier,
                           'Issue-Id' => issue.id,

@@ -76,25 +76,36 @@ module RedmineMailShaper
             :can_not_time_entry => {
               :can_estimated_time => [],
               :can_not_estimated_time => []
-            }
+            },
+            :language => {}
           }
 
           proj = journalized.project
 
           user_list.each do |user|
             if !for_private_note || user.rms_can_view_private_notes(proj)
+              user_mail = user.mail
+
               if user.rms_can_view_time_entries(proj)
                 if user.rms_can_view_estimated_time(proj)
-                  resp[:can_time_entry][:can_estimated_time] << user.mail
+                  resp[:can_time_entry][:can_estimated_time] << user_mail
                 else
-                  resp[:can_time_entry][:can_not_estimated_time] << user.mail
+                  resp[:can_time_entry][:can_not_estimated_time] << user_mail
                 end
               else
                 if user.rms_can_view_estimated_time(proj)
-                  resp[:can_not_time_entry][:can_estimated_time] << user.mail
+                  resp[:can_not_time_entry][:can_estimated_time] << user_mail
                 else
-                  resp[:can_not_time_entry][:can_not_estimated_time] << user.mail
+                  resp[:can_not_time_entry][:can_not_estimated_time] << user_mail
                 end
+              end
+
+              user_lang = user.language || Setting.default_language
+
+              if resp[:language].key? user_lang
+                resp[:language][user_lang] |= [user_mail]
+              else
+                resp[:language][user_lang] = [user_mail]
               end
             end
           end
