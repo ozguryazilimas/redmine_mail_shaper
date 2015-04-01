@@ -35,7 +35,8 @@ Rails.configuration.to_prepare do
     [Journal, RedmineMailShaper::Patches::JournalMailShaperPatch],
     [User, RedmineMailShaper::Patches::UserMailShaperPatch],
     [Issue, RedmineMailShaper::Patches::IssueMailShaperPatch],
-    [JournalsController, RedmineMailShaper::Patches::JournalsControllerMailShaperPatch]
+    [JournalsController, RedmineMailShaper::Patches::JournalsControllerMailShaperPatch],
+    [WikiContent, RedmineMailShaper::Patches::WikiContentMailShaperPatch]
   ].each do |classname, modulename|
     unless classname.included_modules.include?(modulename)
       classname.send(:include, modulename)

@@ -173,6 +173,83 @@ module RedmineMailShaper
             set_language_if_valid @language_without_mail_shaper
           end
 
+          def mail_shaper_wiki_content_deliver_email(wiki_content, old_recipients, old_cc, typeof_delivery)
+            lang_with_users = User.where(:mail => old_recipients + old_cc).group_by(&:language)
+            @language_without_mail_shaper = current_language
+
+            lang_with_users.each do |lang, users_obj|
+              users = users_obj.map(&:mail)
+              recipients = old_recipients & users
+              cc = old_cc & users
+
+              if recipients.present? || cc.present?
+                case typeof_delivery
+                when 'updated'
+                  Mailer.wiki_content_updated(wiki_content, recipients, cc, lang).deliver
+                when 'added'
+                  Mailer.wiki_content_added(wiki_content, recipients, cc, lang).deliver
+                end
+              end
+            end
+
+            set_language_if_valid @language_without_mail_shaper
+          end
+
+          def self.mail_shaper_wiki_content_added(wiki_content)
+            old_recipients = wiki_content.recipients
+            old_cc = wiki_content.page.wiki.watcher_recipients - old_recipients
+
+            mail_shaper_wiki_content_deliver_email(wiki_content, old_recipients, old_cc, 'added')
+          end
+
+          def self.mail_shaper_wiki_content_updated(wiki_content)
+            old_recipients = wiki_content.recipients
+            old_cc = wiki_content.page.wiki.watcher_recipients + wiki_content.page.watcher_recipients - old_recipients
+
+            mail_shaper_wiki_content_deliver_email(wiki_content, old_recipients, old_cc, 'updated')
+          end
+
+          # default wiki_content_added with forced recipients and cc
+          def wiki_content_added(wiki_content, recipients, cc, lang)
+            set_language_if_valid lang
+
+            redmine_headers 'Project' => wiki_content.project.identifier,
+                            'Wiki-Page-Id' => wiki_content.page.id
+            @author = wiki_content.author
+            message_id wiki_content
+            # recipients = wiki_content.recipients
+            # cc = wiki_content.page.wiki.watcher_recipients - recipients
+            @wiki_content = wiki_content
+            @wiki_content_url = url_for(:controller => 'wiki', :action => 'show',
+                                              :project_id => wiki_content.project,
+                                              :id => wiki_content.page.title)
+            mail :to => recipients,
+              :cc => cc,
+              :subject => "[#{wiki_content.project.name}] #{l(:mail_subject_wiki_content_added, :id => wiki_content.page.pretty_title)}"
+          end
+
+          # default wiki_content_updated with forced recipients and cc
+          def wiki_content_updated(wiki_content, recipients, cc, lang)
+            set_language_if_valid lang
+
+            redmine_headers 'Project' => wiki_content.project.identifier,
+                            'Wiki-Page-Id' => wiki_content.page.id
+            @author = wiki_content.author
+            message_id wiki_content
+            # recipients = wiki_content.recipients
+            # cc = wiki_content.page.wiki.watcher_recipients + wiki_content.page.watcher_recipients - recipients
+            @wiki_content = wiki_content
+            @wiki_content_url = url_for(:controller => 'wiki', :action => 'show',
+                                              :project_id => wiki_content.project,
+                                              :id => wiki_content.page.title)
+            @wiki_diff_url = url_for(:controller => 'wiki', :action => 'diff',
+                                           :project_id => wiki_content.project, :id => wiki_content.page.title,
+                                           :version => wiki_content.version)
+            mail :to => recipients,
+              :cc => cc,
+              :subject => "[#{wiki_content.project.name}] #{l(:mail_subject_wiki_content_updated, :id => wiki_content.page.pretty_title)}"
+          end
+
         end
       end
 
