@@ -43,7 +43,15 @@ module RedmineMailShaper
 
           if issue
             if should_create_journal
-              create_journal_for_issue(for_type, force_save && should_send_email)
+
+              # add entry to old issue if issue id of an entry has changed and add the new entry
+              # to new issue as if it is a new one
+              if for_type == 'update' && issue_id_was && issue_id_was != issue_id
+                create_journal_for_issue('delete', force_save && should_send_email, issue_id_was)
+                create_journal_for_issue('create', should_send_email)
+              else
+                create_journal_for_issue(for_type, force_save && should_send_email)
+              end
             elsif should_send_email
               send_email_for_entry(for_type, force_save)
             end
@@ -67,7 +75,7 @@ module RedmineMailShaper
           ).deliver
         end
 
-        def create_journal_for_issue(for_type, force_save)
+        def create_journal_for_issue(for_type, force_save, force_issue_id = false)
           # try really hard not to create entries for anonymous users
           init_journal_user = User.current
 
@@ -75,7 +83,13 @@ module RedmineMailShaper
             init_journal_user = user
           end
 
-          journal = issue.current_journal || issue.init_journal(init_journal_user)
+          if force_issue_id
+            target_issue = Issue.find(force_issue_id)
+          else
+            target_issue = issue
+          end
+
+          journal = target_issue.current_journal || target_issue.init_journal(init_journal_user)
 
           # changes in associations are not considered as dirty record for self
           # so we have to fetch the data by hand
@@ -106,7 +120,7 @@ module RedmineMailShaper
 
           unless ((for_type == 'create') and !force_save)
             journal.save!
-            issue.save!
+            target_issue.save!
           end
         end
 
