@@ -4,9 +4,12 @@ en:
   setting_wiki_diff_on_create: "Content of new wiki pages"
   setting_issue_show_parent_subject: "Issue parent subject"
   setting_diff_hunk_line_size: "Number of lines around differences"
-  label_difference_settings: "Difference settings"
+  label_difference_settings: "Wiki difference settings"
   label_add_to_notification_mails: "Notification mails include"
   label_suppress_email: "Do not send e-mail if there is only one change in issue and it is one of the following"
+  label_time_entry_visibility: 'Time entry visibility'
+  label_time_entry_create_journal: 'Time entries create issue journal'
+  label_time_entry_send_email: 'Time entries trigger email notification'
   text_zero_to_disable: "Use zero value (0) to disable"
 
   journal_entry_time_entry_create: "New spent time"

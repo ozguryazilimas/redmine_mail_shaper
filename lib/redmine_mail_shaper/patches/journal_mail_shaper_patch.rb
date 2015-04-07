@@ -49,7 +49,7 @@ module RedmineMailShaper
             when 'attachment'
               ret = settings[:suppress_email_for_attachment]
             when 'time_entry'
-              ret = settings[:suppress_email_for_time_entry]
+              ret = !settings[:time_entry_send_email] || settings[:suppress_email_for_time_entry]
             when 'attr'
               unless settings[:suppress_email_for_attr].blank?
                 ret = settings[:suppress_email_for_attr].include? detail.prop_key

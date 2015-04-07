@@ -21,7 +21,9 @@ Redmine::Plugin.register :redmine_mail_shaper do
       :suppress_email_for_attachment => 0,
       :suppress_email_for_time_entry => 0,
       :suppress_email_for_cf => [],
-      :suppress_email_for_attr => []
+      :suppress_email_for_attr => [],
+      :time_entry_send_email => 0,
+      :time_entry_create_journal => 0
   }
 
 end

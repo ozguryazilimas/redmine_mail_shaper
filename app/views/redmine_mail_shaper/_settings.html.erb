@@ -36,6 +36,19 @@
   cf_names = CustomField.all.collect(&:name).uniq
 %>
 
+<fieldset><legend><%=h l(:label_time_entry_visibility) %></legend>
+  <div class="box tabular settings">
+    <p>
+      <%= content_tag :label, l(:label_time_entry_send_email) %>
+      <%= check_box_tag 'settings[time_entry_send_email]', 1, settings[:time_entry_send_email] %>
+    </p>
+    <p>
+      <%= content_tag :label, l(:label_time_entry_create_journal) %>
+      <%= check_box_tag 'settings[time_entry_create_journal]', 1, settings[:time_entry_create_journal] %>
+    </p>
+  </div>
+</fieldset>
+
 <fieldset><legend><%=h l(:label_suppress_email) %></legend>
   <div class="box tabular settings">
     <p>

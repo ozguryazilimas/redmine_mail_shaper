@@ -33,14 +33,28 @@ module RedmineMailShaper
           create_journal('create', true)
         end
 
+
         private
 
+
         def create_journal(for_type, force_save=false)
-          issue ? create_journal_for_issue(for_type, force_save) :
-                  send_mail_for_entry(for_type, force_save)
+          should_send_email = RedmineMailShaper.settings[:time_entry_send_email]
+          should_create_journal = RedmineMailShaper.settings[:time_entry_create_journal]
+
+          if issue
+            if should_create_journal
+              create_journal_for_issue(for_type, force_save && should_send_email)
+            elsif should_send_email
+              send_email_for_entry(for_type, force_save)
+            end
+          else
+            if should_send_email
+              send_email_for_entry(for_type, force_save)
+            end
+          end
         end
 
-        def send_mail_for_entry(for_type, force_save)
+        def send_email_for_entry(for_type, force_save)
           # We do not suppress email here since that setting is for issue changes only
           notified = project.notified_users.select {|k| k.allowed_to?(:view_time_entries, project)}
           notified.uniq!
