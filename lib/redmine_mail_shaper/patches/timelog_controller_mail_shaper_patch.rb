@@ -22,7 +22,7 @@ module RedmineMailShaper
           call_hook(:controller_timelog_edit_before_save, { :params => params, :time_entry => @time_entry })
 
           if @time_entry.save
-            @time_entry.create_journal_entry
+            @time_entry.create_journal_entry if RedmineMailShaper.settings[:time_entry_create_journal]
 
             respond_to do |format|
               format.html {
