@@ -6,7 +6,7 @@ Redmine::Plugin.register :redmine_mail_shaper do
   name 'Redmine Mail Shaper plugin'
   author 'Onur Kucuk'
   description 'Format and behaviour changer plugin for Redmine notification e-mails '
-  version '2.8.1'
+  version '2.9.0'
   url 'http://www.ozguryazilim.com.tr'
   author_url 'http://www.ozguryazilim.com.tr'
   requires_redmine :version_or_higher => '2.5.1'
@@ -30,6 +30,7 @@ end
 
 Rails.configuration.to_prepare do
   [
+    [ApplicationHelper, RedmineMailShaper::Patches::ApplicationHelperMailShaperPatch],
     [IssuesHelper, RedmineMailShaper::Patches::IssuesHelperMailShaperPatch],
     [TimeEntry, RedmineMailShaper::Patches::TimeEntryMailShaperPatch],
     [Mailer, RedmineMailShaper::Patches::MailerMailShaperPatch],

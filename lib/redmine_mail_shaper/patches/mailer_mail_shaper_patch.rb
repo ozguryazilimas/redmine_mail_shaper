@@ -288,10 +288,14 @@ module RedmineMailShaper
 
         def time_entry_edit(time_entry, for_type, notified, activity_name_was)
           redmine_headers 'Project' => time_entry.project.identifier
+          redmine_headers 'Time-Entry-Only' => 'Yes'
           @author = time_entry.user
           message_id time_entry
 
           @time_entry = time_entry
+          @issue = time_entry.issue
+          redmine_headers 'Time-Entry-Has-Issue' => (@issue.blank? ? 'No' : 'Yes')
+
           @for_type = for_type
           @time_entry_url = url_for(:controller => 'timelog', :action => 'edit', :id => time_entry.id)
           @activity_name = time_entry.activity.name
@@ -301,8 +305,26 @@ module RedmineMailShaper
           @hours = time_entry.hours
           @hours_was = time_entry.hours_was
 
+          @time_entry_attrs = {
+            'activity_name' => @activity_name,
+            'activity_name_was' => @activity_name_was,
+            'comments' => " (#{@comments})",
+            'comments_was' => " (#{@comments_was})",
+            'hours' => @hours,
+            'hours_was' => @hours_was
+          }
+
+          if @issue
+            @issue_url = url_for(:controller => 'issues', :action => 'show', :id => @issue, :anchor => "change-#{@issue.last_journal_id}")
+
+            @subject = "[#{@issue.project.name} - #{@issue.tracker.name} ##{@issue.id}] #{@issue.subject} - "
+            @subject << l("journal_entry_time_entry_#{for_type}")
+          else
+            @subject = "[#{time_entry.project.name}] " + l("journal_entry_time_entry_#{for_type}")
+          end
+
           mail :to => notified,
-            :subject => "[#{time_entry.project.name}] " + l("journal_entry_time_entry_#{for_type}")
+            :subject => @subject
         end
 
       end

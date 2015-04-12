@@ -1,37 +1,50 @@
+
 <h1><%= link_to(h(l(:label_time_entry_change_by, :author => h(@author.name))), @time_entry_url) %></h1>
 
-<p>
-  <strong>
-    <%= l(:label_project) %>:
-  </strong>
-  <%= @time_entry.project.name %>
-</p>
+<% if @issue %>
+  <ul>
+    <li>
+      <%= rms_time_entry_as_issue_journal(@time_entry, @for_type, @time_entry_attrs, false) %>
+    </li>
+  </ul>
 
-<p>
-  <strong>
-    <%= l(:field_author) %>:
-  </strong>
-  <%= @author.name %>
-</p>
+  <hr />
+  <%= render :partial => 'mail_shaper_issue', :formats => [:html], :locals => { :issue => @issue, :issue_url => @issue_url, :can_view_time_entries => true } %>
+<% else %>
+  <p>
+    <strong>
+      <%= l(:label_project) %>:
+    </strong>
+    <%= @time_entry.project.name %>
+  </p>
 
-<p>
-  <strong>
-    <%= l("journal_entry_time_entry_#{@for_type}") %>:
-  </strong>
-  <% if @for_type == 'update' %>
-    <%= l(:label_f_hour_plural, :value => @hours_was) %> <i><%= @activity_name_was %></i> -&gt;
-  <% end %>
-  <%= l(:label_f_hour_plural, :value => @hours) %> <i><%= @activity_name %></i>
-</p>
+  <p>
+    <strong>
+      <%= l(:field_author) %>:
+    </strong>
+    <%= @author.name %>
+  </p>
 
-<p>
-  <strong>
-    <%= l(:label_comment) %>:
-  </strong>
-  <% if @for_type == 'update' %>
-    <%= @comments_was %> -&gt;
-  <% end %>
-  <% unless @comments.blank? %>
-    <%= @comments %>
-  <% end %>
-</p>
+  <p>
+    <strong>
+      <%= l("journal_entry_time_entry_#{@for_type}") %>:
+    </strong>
+    <% if @for_type == 'update' %>
+      <%= l(:label_f_hour_plural, :value => @hours_was) %> <i><%= @activity_name_was %></i> -&gt;
+    <% end %>
+    <%= l(:label_f_hour_plural, :value => @hours) %> <i><%= @activity_name %></i>
+  </p>
+
+  <p>
+    <strong>
+      <%= l(:label_comment) %>:
+    </strong>
+    <% if @for_type == 'update' %>
+      <%= @comments_was %> -&gt;
+    <% end %>
+    <% unless @comments.blank? %>
+      <%= @comments %>
+    <% end %>
+  </p>
+<% end %>
+
