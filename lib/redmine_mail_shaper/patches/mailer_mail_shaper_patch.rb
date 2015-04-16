@@ -320,7 +320,12 @@ module RedmineMailShaper
             redmine_headers 'Issue-Assignee' => @issue.assigned_to.login if @issue.assigned_to
             references @issue
 
-            @issue_url = url_for(:controller => 'issues', :action => 'show', :id => @issue, :anchor => "change-#{@issue.last_journal_id}")
+            issue_last_journal_id = @issue.last_journal_id
+            if issue_last_journal_id
+              @issue_url = url_for(:controller => 'issues', :action => 'show', :id => @issue, :anchor => "change-#{issue_last_journal_id}")
+            else
+              @issue_url = url_for(:controller => 'issues', :action => 'show', :id => @issue)
+            end
 
             @subject = "[#{@issue.project.name} - #{@issue.tracker.name} ##{@issue.id}] #{@issue.subject} - "
             @subject << l("journal_entry_time_entry_#{for_type}")
