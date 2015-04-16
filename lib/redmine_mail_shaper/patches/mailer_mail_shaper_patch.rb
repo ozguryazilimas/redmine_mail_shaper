@@ -319,9 +319,10 @@ module RedmineMailShaper
                             'Issue-Author' => @issue.author.login
             redmine_headers 'Issue-Assignee' => @issue.assigned_to.login if @issue.assigned_to
 
-            # try to cleanup time_entry references object
-            @references_objects = []
+            # try to cleanup time_entry references object, this is the last resort, try not to open the line below
+            # @references_objects = []
             references @issue
+            message_id @issue
 
             issue_last_journal_id = @issue.last_journal_id
             if issue_last_journal_id
