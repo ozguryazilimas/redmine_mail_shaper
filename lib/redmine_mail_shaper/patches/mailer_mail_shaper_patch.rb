@@ -174,7 +174,7 @@ module RedmineMailShaper
           end
 
           def mail_shaper_wiki_content_deliver_email(wiki_content, old_recipients, old_cc, typeof_delivery)
-            lang_with_users = User.where(:mail => old_recipients + old_cc).group_by(&:language)
+            lang_with_users = User.joins(:email_address).where('email_addresses.address in (?)', old_recipients + old_cc).group_by(&:language)
             @language_without_mail_shaper = current_language
 
             lang_with_users.each do |lang, users_obj|
@@ -277,7 +277,7 @@ module RedmineMailShaper
           s << issue.subject
           @issue = issue
           @journal = journal
-          @journal_details = journal.visible_details(User.where(:mail => @users.first).first)
+          @journal_details = journal.visible_details(User.joins(:email_address).where('email_addresses.address in (?)', [@users.first]).first)
           @issue_url = url_for(:controller => 'issues', :action => 'show', :id => issue, :anchor => "change-#{journal.id}")
           @can_view_time_entries = can_view_time_entries
           @can_view_estimated_time = can_view_estimated_time
