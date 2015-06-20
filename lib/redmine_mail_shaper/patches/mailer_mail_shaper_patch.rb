@@ -173,7 +173,7 @@ module RedmineMailShaper
             set_language_if_valid @language_without_mail_shaper
           end
 
-          def mail_shaper_wiki_content_deliver_email(wiki_content, old_recipients, old_cc, typeof_delivery)
+          def self.mail_shaper_wiki_content_deliver_email(wiki_content, old_recipients, old_cc, typeof_delivery)
             lang_with_users = User.joins(:email_address).where('email_addresses.address in (?)', old_recipients + old_cc).group_by(&:language)
             @language_without_mail_shaper = current_language
 
@@ -199,14 +199,14 @@ module RedmineMailShaper
             old_recipients = wiki_content.recipients
             old_cc = wiki_content.page.wiki.watcher_recipients - old_recipients
 
-            mail_shaper_wiki_content_deliver_email(wiki_content, old_recipients, old_cc, 'added')
+            Mailer.mail_shaper_wiki_content_deliver_email(wiki_content, old_recipients, old_cc, 'added')
           end
 
           def self.mail_shaper_wiki_content_updated(wiki_content)
             old_recipients = wiki_content.recipients
             old_cc = wiki_content.page.wiki.watcher_recipients + wiki_content.page.watcher_recipients - old_recipients
 
-            mail_shaper_wiki_content_deliver_email(wiki_content, old_recipients, old_cc, 'updated')
+            Mailer.mail_shaper_wiki_content_deliver_email(wiki_content, old_recipients, old_cc, 'updated')
           end
 
           # default wiki_content_added with forced recipients and cc
