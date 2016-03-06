@@ -29,5 +29,5 @@
 %>
 <%= @template_from %> -> <%= @template_to %>
 
-<%= truncate_for_mail_shaper Diff::LCS.unified_diff(@data_from, @data_to) %>
+<%= truncate_for_mail_shaper(h(Diff::LCS.unified_diff(@data_from, @data_to)), true) %>
 <% end %>
