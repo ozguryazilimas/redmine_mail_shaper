@@ -290,6 +290,7 @@ module RedmineMailShaper
           redmine_headers 'Project' => time_entry.project.identifier
           redmine_headers 'Time-Entry-Only' => 'Yes'
           @author = time_entry.user
+          @time_entry_edit_user = User.current
           message_id time_entry
 
           @time_entry = time_entry
@@ -345,4 +346,3 @@ module RedmineMailShaper
     end
   end
 end
-

@@ -1,5 +1,5 @@
 
-<h1><%= link_to(h(l(:label_time_entry_change_by, :author => h(@author.name))), @time_entry_url) %></h1>
+<h1><%= link_to(h(l(:label_time_entry_change_by, :author => h(@time_entry_edit_user.name))), @time_entry_url) %></h1>
 
 <% if @issue %>
   <ul>
@@ -47,4 +47,3 @@
     <% end %>
   </p>
 <% end %>
-
