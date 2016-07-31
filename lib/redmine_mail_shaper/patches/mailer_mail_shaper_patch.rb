@@ -289,7 +289,7 @@ module RedmineMailShaper
         def time_entry_edit(time_entry, for_type, notified, activity_name_was)
           redmine_headers 'Project' => time_entry.project.identifier
           redmine_headers 'Time-Entry-Only' => 'Yes'
-          @author = time_entry.user
+          @author = User.anonymous.try(:id) == User.current.try(:id) ? time_entry.user : User.current
           message_id time_entry
 
           @time_entry = time_entry
