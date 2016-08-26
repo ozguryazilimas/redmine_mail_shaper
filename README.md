@@ -1,28 +1,29 @@
 # Mail Shaper
-Redmine eposta sistemine yeni yetenekler ekler.
+Mail shaper plugin adds a new capabilities to Redmine email system.
+## Features
 
-## Özellikleri
-1. Wiki sayfası güncellemeleri ve yeni wiki sayfası içeriği email yoluyla alınır.
-2. Eğer iş bir alt işse, üst iş konusu da alt işle beraber iletilir.
-3. Wiki sayfasındaki değişiklikler e-posta yoluyla alındığı zaman yapılan tüm değişiklikleri gösteren uzun bir e-postayı engellemek için satır sayısı limitlenir.
-4. Zaman kaydı girdileri için e-posta yoluyla kullanıcılara e-posta gidebilir.
-5. İş kaydındaki tek bir değişiklik için örneğin atanan kısmı değişikliği için e-posta alımı engellenebilir.
+1. Wiki page updates and new wiki page content are received via email.
+2. If the issue is subtask,the parent issue's subject is received with the subtask.
+3. When email sending for wiki changes is enabled, it is possible to limit the number of rows for this email to avoid long email.
+4. Users get email for time entries.
+5. You can configure mail shaper not to send email when there is one change at a time and the change is a preconfigured value, such as assigned part.
 
-## Ayarlar
-* Eklenti ayarlarına yönetici hesabı ile /administration/plugins/redmine_mail_shaper adresinden ulaşılabilir.
+## Settings
+* Plugin settings are accessible at /administration/plugins/redmine_mail_shaper address with administration account.
 
-## Kullanımı
-* Issue parent subject: Aktif edilirse, iş bir alt iş ise gelen e-postada üst işin konusu da yazar.
-* Changes on wiki page updates: Wiki sayfasında yapılan güncellemeler için ile e-posta gelir.
-* Content of new wiki pages: Yeni wiki sayfasının içeriği e-posta yoluyla iletilir.
-* Number of lines around differences: Bu alana wiki sayfasında yapılan değişikliklerin kaç satır üstü ve kaç satır altı gösterileceği yazılır.
-Örnek: Buraya 4 değeri girilirse wikide yapılan değişikliklerin 4 satır üstü ve 4 satır altı da e-posta ile gelir. E-postada, yapılan değişiklikler yeşil ile gösterilir.
-* Maximum number of diff lines displayed: Wiki sayfasında yapılan dğeişiklikler çok fazla ise uzun bir e-postadan kaçınmak için buraya rakam yazarak limitlenebilir.
-Örnek:
-Bu alana 50 yazılır ise e-posta yoluyla e-postada 50 satır değişiklik gözükür.
-* Time entries trigger email notification: Aktif edilirse zaman kaydı girdileri için e-posta iletilir.
-* Time entries create issue journal: İş kaydında zaman girdilerinin yorum olarak gözükmesi istenirse aktif edilir.
-* Spent time: İş kaydındaki tek değişik harcanan zaman girdisi ise ve e-posta ile alınmak istenirse seçilir.
-* Files: İş kaydında tek değişik dosya eklenmesi ise ve bu e-posta ile alınmak istenirse seçilir.
-* Attributes:  İş kaydında hangi alanda değişiklik yapıldığında e-posta alınmak istenmiyorsa o seçenek seçilir.
-* Custom fields: Özel alanda yapılan tek değişiklik için e-posta alınmak istenmiyorsa bu seçenek seçilir.
+## Usage
+* Issue parent subject: If activated, if the job is subtask, parent issue's subject is written in the email.
+* Changes on wiki page updates: Users get email for the updates in the wiki pages.
+* Content of new wiki pages: New wiki page's content is received via email.
+* Number of lines around differences:How many unchanged lines to show before and after the lines that has changed in wiki difference emails.
+Example:
+If 4 is entered here, 4 top and 4 bottom rows for the changes in the wiki are received by email.Green parts in the email show the amendments.
+* Maximum number of diff lines displayed: In order to avoid long email, it is to possible to limit changes in the wiki page by writing number.
+Example: 
+If 50 is written in this area,50 changes are shown in the email.
+* Time entries trigger email notification: If activated, time entries are received via email.
+* Time entries create issue journal: If activated, time entry is shown on the issue as a comment.
+* Spent time:If activated, users get email when the only change in the issue is time entry.
+* Files: If activated,users get email when file is uploaded in the issue.
+* Attributes: Option that you do not want to get email about changes in the issue is selected.
+* Custom fields: If there is only one change and the change is in any one of these custom fields, email will not be be send
