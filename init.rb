@@ -1,3 +1,4 @@
+require 'redmine'
 require 'redmine_mail_shaper'
 require 'unified_diff'
 
