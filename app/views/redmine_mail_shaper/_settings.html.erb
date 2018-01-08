@@ -2,15 +2,15 @@
   <div class="box tabular settings">
     <p>
       <%= content_tag :label, l(:setting_issue_show_parent_subject) %>
-      <%= check_box_tag 'settings[issue_show_parent_subject]', 1, settings[:issue_show_parent_subject] %>
+      <%= check_box_tag 'settings[issue_show_parent_subject]', 1, settings['issue_show_parent_subject'] %>
     </p>
     <p>
       <%= content_tag :label, l(:setting_wiki_diff_on_update) %>
-      <%= check_box_tag 'settings[wiki_diff_on_update]', 1, settings[:wiki_diff_on_update] %>
+      <%= check_box_tag 'settings[wiki_diff_on_update]', 1, settings['wiki_diff_on_update'] %>
     </p>
     <p>
       <%= content_tag :label, l(:setting_wiki_diff_on_create) %>
-      <%= check_box_tag 'settings[wiki_diff_on_create]', 1, settings[:wiki_diff_on_create] %>
+      <%= check_box_tag 'settings[wiki_diff_on_create]', 1, settings['wiki_diff_on_create'] %>
     </p>
   </div>
 </fieldset>
@@ -20,11 +20,11 @@
     <p>
       <%= content_tag :label, l(:setting_diff_hunk_line_size) %>
       <%= select_tag 'settings[diff_hunk_line_size]',
-            options_for_select((0..10).map {|k| [k*2, k]}, settings[:diff_hunk_line_size].to_i) %>
+            options_for_select((0..10).map {|k| [k*2, k]}, settings['diff_hunk_line_size'].to_i) %>
     </p>
     <p>
       <%= content_tag :label, l(:setting_diff_max_lines_displayed) %>
-      <%= text_field_tag 'settings[diff_max_lines_displayed]', settings[:diff_max_lines_displayed], :size => 5 %>
+      <%= text_field_tag 'settings[diff_max_lines_displayed]', settings['diff_max_lines_displayed'], :size => 5 %>
       <em class="info"><%= l(:text_zero_to_disable) %></em>
     </p>
   </div>
@@ -40,11 +40,11 @@
   <div class="box tabular settings">
     <p>
       <%= content_tag :label, l(:label_time_entry_send_email) %>
-      <%= check_box_tag 'settings[time_entry_send_email]', 1, settings[:time_entry_send_email] %>
+      <%= check_box_tag 'settings[time_entry_send_email]', 1, settings['time_entry_send_email'] %>
     </p>
     <p>
       <%= content_tag :label, l(:label_time_entry_create_journal) %>
-      <%= check_box_tag 'settings[time_entry_create_journal]', 1, settings[:time_entry_create_journal] %>
+      <%= check_box_tag 'settings[time_entry_create_journal]', 1, settings['time_entry_create_journal'] %>
     </p>
   </div>
 </fieldset>
@@ -53,22 +53,22 @@
   <div class="box tabular settings">
     <p>
       <%= content_tag :label, l(:label_time_entry_plural) %>
-      <%= check_box_tag 'settings[suppress_email_for_time_entry]', 1, settings[:suppress_email_for_time_entry] %>
+      <%= check_box_tag 'settings[suppress_email_for_time_entry]', 1, settings['suppress_email_for_time_entry'] %>
     </p>
     <p>
       <%= content_tag :label, l(:label_attachment_plural) %>
-      <%= check_box_tag 'settings[suppress_email_for_attachment]', 1, settings[:suppress_email_for_attachment] %>
+      <%= check_box_tag 'settings[suppress_email_for_attachment]', 1, settings['suppress_email_for_attachment'] %>
     </p>
     <p>
       <%= content_tag :label, l(:label_attribute_plural) %>
       <%= select_tag 'settings[suppress_email_for_attr]',
-        options_for_select(issue_attr_pair, settings[:suppress_email_for_attr]), :size => 10, :multiple => true %>
+        options_for_select(issue_attr_pair, settings['suppress_email_for_attr']), :size => 10, :multiple => true %>
     </p>
     <% unless cf_names.blank? %>
       <p>
         <%= content_tag :label, l(:label_custom_field_plural) %>
         <%= select_tag 'settings[suppress_email_for_cf]',
-          options_for_select(cf_names, settings[:suppress_email_for_cf]), :size => 10, :multiple => true %>
+          options_for_select(cf_names, settings['suppress_email_for_cf']), :size => 10, :multiple => true %>
       </p>
     <% end %>
   </div>
