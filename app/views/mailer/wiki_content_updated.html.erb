@@ -11,7 +11,7 @@
 <p><%= l(:label_view_diff) %>:<br />
 <%= link_to h(@wiki_diff_url), @wiki_diff_url %></p>
 <%
-  if Setting[:plugin_redmine_mail_shaper][:wiki_diff_on_update]
+  if RedmineMailShaper.settings[:wiki_diff_on_update]
     @page = @wiki_content.page
     @diff = @page.diff @wiki_content.version
 %>

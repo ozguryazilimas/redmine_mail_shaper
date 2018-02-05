@@ -15,7 +15,7 @@ module RedmineMailShaper
       module InstanceMethods
 
         def rms_parent_issue_subject
-          if Setting[:plugin_redmine_mail_shaper][:issue_show_parent_subject] && parent_issue_id.present?
+          if RedmineMailShaper.settings[:issue_show_parent_subject] && parent_issue_id.present?
             parent.subject
           else
             nil

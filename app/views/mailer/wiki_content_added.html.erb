@@ -2,7 +2,7 @@
                                         :author => h(@wiki_content.author)).html_safe %><br />
 <em><%=h @wiki_content.comments %></em></p>
 
-<% if Setting[:plugin_redmine_mail_shaper][:wiki_diff_on_create] %>
+<% if RedmineMailShaper.settings[:wiki_diff_on_create] %>
   <pre>
     <%= truncate_for_mail_shaper @wiki_content.text %>
   </pre>

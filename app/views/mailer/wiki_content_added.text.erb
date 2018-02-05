@@ -4,7 +4,7 @@
 
 <%= @wiki_content_url %>
 
-<% if Setting[:plugin_redmine_mail_shaper][:wiki_diff_on_create] %>
+<% if RedmineMailShaper.settings[:wiki_diff_on_create] %>
 <%= truncate_for_mail_shaper @wiki_content.text %>
 <% end %>
 
