@@ -8,7 +8,6 @@ module RedmineMailShaper
         base.send(:include, InstanceMethods)
 
         base.class_eval do
-          unloadable  # to make sure plugin is loaded in development mode
 
           def self.mail_shaper_deliver_issue_edit(journal)
             if journal.details.select{|k| (k.property == 'time_entry') || (k.prop_key == 'estimated_hours')}.blank?

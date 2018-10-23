@@ -8,7 +8,6 @@ module RedmineMailShaper
         base.send(:include, InstanceMethods)
 
         base.class_eval do
-          unloadable  # to make sure plugin is loaded in development mode
           alias_method_chain :new, :mail_shaper
         end
       end

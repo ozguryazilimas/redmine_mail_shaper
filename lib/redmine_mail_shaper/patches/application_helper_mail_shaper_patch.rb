@@ -8,7 +8,6 @@ module RedmineMailShaper
         base.send(:include, InstanceMethods)
 
         base.class_eval do
-          unloadable  # to make sure plugin is loaded in development mode
 
           # need this to be accessible from issues, time_entries, timelogs, mailer etc.
           def rms_time_entry_as_issue_journal(time_entry, for_type, entry_attrs, no_html = false)
