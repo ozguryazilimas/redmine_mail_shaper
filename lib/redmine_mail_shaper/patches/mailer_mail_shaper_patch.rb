@@ -87,6 +87,11 @@ module RedmineMailShaper
                             'Issue-Id' => issue.id,
                             'Issue-Author' => issue.author.login
             redmine_headers 'Issue-Assignee' => issue.assigned_to.login if issue.assigned_to
+
+            issue.author.roles_for_project(issue.project).map(&:name).each do |role_name|
+              redmine_headers 'Sender-Role' => role_name
+            end
+
             message_id issue
             references issue
             @author = issue.author
@@ -109,6 +114,11 @@ module RedmineMailShaper
                             'Issue-Author' => issue.author.login
             redmine_headers 'Issue-Assignee' => issue.assigned_to.login if issue.assigned_to
             redmine_headers 'Issue-Edit-Has-Note' => (journal.notes.blank? ? 'No' : 'Yes')
+
+            journal.user.roles_for_project(issue.project).map(&:name).each do |role_name|
+              redmine_headers 'Sender-Role' => role_name
+            end
+
             message_id journal
             references issue
             @author = journal.user
@@ -214,6 +224,11 @@ module RedmineMailShaper
 
             redmine_headers 'Project' => wiki_content.project.identifier,
                             'Wiki-Page-Id' => wiki_content.page.id
+
+            wiki_content.author.roles_for_project(wiki_content.project).map(&:name).each do |role_name|
+              redmine_headers 'Sender-Role' => role_name
+            end
+
             @author = wiki_content.author
             message_id wiki_content
             # recipients = wiki_content.recipients
@@ -233,6 +248,11 @@ module RedmineMailShaper
 
             redmine_headers 'Project' => wiki_content.project.identifier,
                             'Wiki-Page-Id' => wiki_content.page.id
+
+            wiki_content.author.roles_for_project(wiki_content.project).map(&:name).each do |role_name|
+              redmine_headers 'Sender-Role' => role_name
+            end
+
             @author = wiki_content.author
             message_id wiki_content
             # recipients = wiki_content.recipients
@@ -264,6 +284,11 @@ module RedmineMailShaper
                           'Issue-Author' => issue.author.login
           redmine_headers 'Issue-Assignee' => issue.assigned_to.login if issue.assigned_to
           redmine_headers 'Issue-Edit-Has-Note' => (journal.notes.blank? ? 'No' : 'Yes')
+
+          journal.user.roles_for_project(journal.project).map(&:name).each do |role_name|
+            redmine_headers 'Sender-Role' => role_name
+          end
+
           message_id journal
           references issue
           @author = journal.user
@@ -317,6 +342,10 @@ module RedmineMailShaper
             redmine_headers 'Issue-Id' => @issue.id,
                             'Issue-Author' => @issue.author.login
             redmine_headers 'Issue-Assignee' => @issue.assigned_to.login if @issue.assigned_to
+
+            @author.roles_for_project(issue.project).map(&:name).each do |role_name|
+              redmine_headers 'Sender-Role' => role_name
+            end
 
             # try to cleanup time_entry references object, this is the last resort, try not to open the line below
             # @references_objects = []
