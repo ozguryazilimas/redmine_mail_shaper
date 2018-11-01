@@ -343,7 +343,7 @@ module RedmineMailShaper
                             'Issue-Author' => @issue.author.login
             redmine_headers 'Issue-Assignee' => @issue.assigned_to.login if @issue.assigned_to
 
-            @author.roles_for_project(issue.project).map(&:name).each do |role_name|
+            @author.roles_for_project(@issue.project).map(&:name).each do |role_name|
               redmine_headers 'Sender-Role' => role_name
             end
 
