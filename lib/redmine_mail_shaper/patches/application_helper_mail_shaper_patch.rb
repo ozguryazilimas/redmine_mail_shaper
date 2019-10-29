@@ -5,8 +5,6 @@ module RedmineMailShaper
   module Patches
     module ApplicationHelperMailShaperPatch
       def self.included(base) # :nodoc:
-        base.send(:include, InstanceMethods)
-
         base.class_eval do
 
           # need this to be accessible from issues, time_entries, timelogs, mailer etc.
@@ -48,9 +46,6 @@ module RedmineMailShaper
         end
       end
 
-      module InstanceMethods
-
-      end
     end
   end
 end

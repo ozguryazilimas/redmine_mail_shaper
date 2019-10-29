@@ -45,8 +45,8 @@ module RedmineMailShaper
 
               # add entry to old issue if issue id of an entry has changed and add the new entry
               # to new issue as if it is a new one
-              if for_type == 'update' && issue_id_was && issue_id_was != issue_id
-                create_journal_for_issue('delete', force_save && should_send_email, issue_id_was)
+              if for_type == 'update' && issue_id_before_last_save && saved_change_to_issue_id?
+                create_journal_for_issue('delete', force_save && should_send_email, issue_id_before_last_save)
                 create_journal_for_issue('create', should_send_email)
               else
                 create_journal_for_issue(for_type, force_save && should_send_email)
@@ -63,15 +63,8 @@ module RedmineMailShaper
 
         def send_email_for_entry(for_type, force_save)
           # We do not suppress email here since that setting is for issue changes only
-          notified = project.notified_users.select {|k| k.allowed_to?(:view_time_entries, project)}
-          notified.uniq!
-          activity_old = TimeEntryActivity.find(activity_id_was).name_was rescue ''
-
-          Mailer.time_entry_edit(self,
-                                 for_type,
-                                 notified.collect(&:mail),
-                                 activity_old
-          ).deliver
+          activity_old = TimeEntryActivity.find(activity_id_before_last_save).name_before_last_save rescue ''
+          Mailer.deliver_time_entry_edit(self, for_type, activity_old)
         end
 
         def create_journal_for_issue(for_type, force_save, force_issue_id = false)
@@ -92,15 +85,15 @@ module RedmineMailShaper
 
           # changes in associations are not considered as dirty record for self
           # so we have to fetch the data by hand
-          activity_old = TimeEntryActivity.find(activity_id_was).name rescue ''
+          activity_old = TimeEntryActivity.find(activity_id_before_last_save).name rescue ''
           activity_new = TimeEntryActivity.find(activity_id).name rescue ''
 
           # keep obj values as hash in db to allow conditional formatting on helper
           obj_old_value = {
-            'hours_was' => hours_was,
+            'hours_was' => hours_before_last_save,
             'hours' => hours,
-            'comments_was' => comments_was.blank? ? "" : " (#{comments_was})",
-            'comments' => comments.blank? ? "" : " (#{comments})",
+            'comments_was' => (comments_before_last_save.blank? ? '' : " (#{comments_before_last_save})"),
+            'comments' => (comments.blank? ? '' : " (#{comments})"),
             'activity_name_was' => activity_old,
             'activity_name' => activity_new
           }

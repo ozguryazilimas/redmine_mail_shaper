@@ -1,7 +1,12 @@
+
 # Mail Shaper
+
 Redmine eposta sistemine yeni yetenekler ekler.
 
+Bu daldaki sürümler Redmine 4.x ile uyumludur, Redmine 3.x serisi için redmine3 dalını inceleyiniz.
+
 ## Özellikleri
+
 1. Wiki sayfası güncellemeleri ve yeni wiki sayfası içeriği email yoluyla alınır.
 2. Eğer iş bir alt işse, üst iş konusu da alt işle beraber iletilir.
 3. Wiki sayfasındaki değişiklikler e-posta yoluyla alındığı zaman yapılan tüm değişiklikleri gösteren uzun bir e-postayı engellemek için satır sayısı limitlenir.
@@ -9,9 +14,11 @@ Redmine eposta sistemine yeni yetenekler ekler.
 5. İş kaydındaki tek bir değişiklik için örneğin atanan kısmı değişikliği için e-posta alımı engellenebilir.
 
 ## Ayarlar
+
 * Eklenti ayarlarına yönetici hesabı ile /administration/plugins/redmine_mail_shaper adresinden ulaşılabilir.
 
 ## Kullanımı
+
 * Issue parent subject: Aktif edilirse, iş bir alt iş ise gelen e-postada üst işin konusu da yazar.
 * Changes on wiki page updates: Wiki sayfasında yapılan güncellemeler için ile e-posta gelir.
 * Content of new wiki pages: Yeni wiki sayfasının içeriği e-posta yoluyla iletilir.
@@ -26,3 +33,4 @@ Bu alana 50 yazılır ise e-posta yoluyla e-postada 50 satır değişiklik göz�
 * Files: İş kaydında tek değişik dosya eklenmesi ise ve bu e-posta ile alınmak istenirse seçilir.
 * Attributes:  İş kaydında hangi alanda değişiklik yapıldığında e-posta alınmak istenmiyorsa o seçenek seçilir.
 * Custom fields: Özel alanda yapılan tek değişiklik için e-posta alınmak istenmiyorsa bu seçenek seçilir.
+

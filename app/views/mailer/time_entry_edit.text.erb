@@ -5,7 +5,7 @@
 <%= rms_time_entry_as_issue_journal(@time_entry, @for_type, @time_entry_attrs, true) %>
 
 ----------------------------------------
-<%= render :partial => 'mail_shaper_issue', :formats => [:text], :locals => { :issue => @issue, :issue_url => @issue_url, :can_view_time_entries => true } %>
+<%= render :partial => 'issue', :formats => [:text], :locals => { :issue => @issue, :user => @user, :issue_url => @issue_url } %>
 <% else %>
 <%= l(:label_project) %>: <%= @time_entry.project.name %>
 <%= l(:field_author) %>: <%= @author.name %>

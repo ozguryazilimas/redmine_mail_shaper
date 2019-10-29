@@ -1,4 +1,0 @@
-= redmine_mail_shaper
-
-Format and behaviour changer plugin for Redmine notification e-mails.
-

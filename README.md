@@ -1,5 +1,10 @@
+
 # Mail Shaper
+
 Mail shaper plugin adds a new capabilities to Redmine email system.
+
+This plugin is compatible with Redmine 4.x. If you want to use it with Redmine 3.x please use redmine3 branch.
+
 ## Features
 
 1. Wiki page updates and new wiki page content are received via email.
@@ -9,9 +14,11 @@ Mail shaper plugin adds a new capabilities to Redmine email system.
 5. You can configure mail shaper not to send email when there is one change at a time and the change is a preconfigured value, such as assigned part.
 
 ## Settings
+
 * Plugin settings are accessible at /administration/plugins/redmine_mail_shaper address with administration account.
 
 ## Usage
+
 * Issue parent subject: If activated, if the job is subtask, parent issue's subject is written in the email.
 * Changes on wiki page updates: Users get email for the updates in the wiki pages.
 * Content of new wiki pages: New wiki page's content is received via email.
@@ -27,3 +34,4 @@ If 50 is written in this area,50 changes are shown in the email.
 * Files: If activated,users get email when file is uploaded in the issue.
 * Attributes: Option that you do not want to get email about changes in the issue is selected.
 * Custom fields: If there is only one change and the change is in any one of these custom fields, email will not be be send
+

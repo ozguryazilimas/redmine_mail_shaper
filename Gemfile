@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'diff-lcs', '~> 1.2.1'
+gem 'diff-lcs', '~> 1.3.0'
 
 # mailcatcher suggest to install in global gemset so install it manually
 #

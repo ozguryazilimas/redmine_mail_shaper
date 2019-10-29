@@ -6,31 +6,25 @@ module RedmineMailShaper
     module IssuesHelperMailShaperPatch
       def self.included(base) # :nodoc:
         base.send(:include, InstanceMethods)
-
-        base.class_eval do
-          alias_method_chain :details_to_strings, :mail_shaper
-        end
       end
 
       module InstanceMethods
 
-        def details_to_strings_with_mail_shaper(details, no_html=false, options={})
+        def details_to_strings(details, no_html=false, options={})
           detail = details.first
+          rval = nil
 
           if detail && detail.property == 'time_entry'
             current_project = @project || detail.journal.project
 
-            if options[:should_force_time_entry_view] || User.current.allowed_to?(:view_time_entries, current_project)
+            if User.current.rms_can_view_time_entries(current_project)
               time_entry = TimeEntry.find_by_id(detail.prop_key)
               entry_attrs = YAML.load(detail.old_value)
               rval = rms_time_entry_as_issue_journal(time_entry, detail.value, entry_attrs, no_html)
             end
-          else
-            # TODO: remove it when we switch to ruby 1.9.x
-            rval = nil
           end
 
-          all_details = details_to_strings_without_mail_shaper(details, no_html, options)
+          all_details = super
 
           # Time entry is not properly parsed by redmine so it leaves a nil
           all_details.delete(nil)
@@ -39,8 +33,38 @@ module RedmineMailShaper
           all_details
         end
 
+        def email_issue_attributes(issue, user, html)
+          rms_items = []
+
+          parent_subject = issue.rms_parent_issue_subject
+          if parent_subject.present?
+            if html
+              rms_items << content_tag('strong', "#{l(:field_parent_issue)}: ") + (h parent_subject)
+            else
+              rms_items << "#{l(:field_parent_issue)}: #{h parent_subject}"
+            end
+          end
+
+          rms_items += super
+
+          if user.rms_can_view_time_entries(issue.project)
+            spent_hours_value = issue.total_spent_hours > 0 ? l(:label_f_hour_plural, :value => "%.2f" % issue.total_spent_hours) : '-'
+
+            if html
+              rms_items << content_tag('strong', "#{l(:label_spent_time)}: ") + spent_hours_value
+            else
+              rms_items << "#{l(:label_spent_time)}: #{spent_hours_value}"
+            end
+          end
+
+          rms_items
+        end
+
       end
     end
   end
 end
+
+IssuesController.helper(RedmineMailShaper::Patches::IssuesHelperMailShaperPatch)
+
 
