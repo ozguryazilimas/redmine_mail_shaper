@@ -66,5 +66,6 @@ module RedmineMailShaper
 end
 
 IssuesController.helper(RedmineMailShaper::Patches::IssuesHelperMailShaperPatch)
+Mailer.helper(RedmineMailShaper::Patches::IssuesHelperMailShaperPatch)
 
 

@@ -180,9 +180,9 @@ module RedmineMailShaper
             end
 
             @subject = "[#{@issue.project.name} - #{@issue.tracker.name} ##{@issue.id}] #{@issue.subject} - "
-            @subject << l("journal_entry_time_entry_#{for_type}")
+            @subject << l("journal_entry_time_entry_#{@for_type}")
           else
-            @subject = "[#{time_entry.project.name}] " + l("journal_entry_time_entry_#{for_type}")
+            @subject = "[#{time_entry.project.name}] " + l("journal_entry_time_entry_#{@for_type}")
           end
 
           mail :to => user,

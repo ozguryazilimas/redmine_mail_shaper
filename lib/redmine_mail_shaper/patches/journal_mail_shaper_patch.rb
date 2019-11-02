@@ -24,8 +24,8 @@ module RedmineMailShaper
         user_can_view_estimated_time = user.rms_can_view_estimated_time(project)
 
         found_details.reject do |detail|
-          detail.property.to_s == 'time_entry' && !user_can_view_time_entries ||
-          detail.property.to_s == 'estimated_hours' && !user_can_view_estimated_time
+          (detail.property.to_s == 'time_entry' && !user_can_view_time_entries) ||
+          (detail.property.to_s == 'estimated_hours' && !user_can_view_estimated_time)
         end
       end
 
