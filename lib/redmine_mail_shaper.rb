@@ -1,3 +1,5 @@
+require 'redmine_mail_shaper/hooks/controller_issues_edit_before_save_hook'
+
 module RedmineMailShaper
 
   def self.settings
