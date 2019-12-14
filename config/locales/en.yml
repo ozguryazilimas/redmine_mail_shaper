@@ -11,10 +11,8 @@ en:
   label_time_entry_create_journal: 'Time entries create issue journal'
   label_time_entry_send_email: 'Time entries trigger email notification'
   text_zero_to_disable: "Use zero value (0) to disable"
-
   journal_entry_time_entry_create: "New spent time"
   journal_entry_time_entry_delete: "Spent time deleted"
   journal_entry_time_entry_update: "Spent time updated"
-
   label_time_entry_change_by: "Time entry change by %{author}"
 

@@ -11,10 +11,8 @@ tr:
   label_time_entry_create_journal: 'Zaman girdileri işlere yorum olarak eklensin'
   label_time_entry_send_email: 'Zaman girdileri eposta ile kullanıcılara haber verilsin'
   text_zero_to_disable: "Kapatmak için sıfır değeri (0) giriniz"
-
   journal_entry_time_entry_create: "Yeni harcanan zaman"
   journal_entry_time_entry_delete: "Harcanan zaman silindi"
   journal_entry_time_entry_update: "Harcanan zaman güncellendi"
-
   label_time_entry_change_by: "%{author} tarafından zaman girdisi değişikliği yapıldı"
 
