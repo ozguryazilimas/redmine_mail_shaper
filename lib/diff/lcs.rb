@@ -4,6 +4,10 @@ require 'diff/lcs/hunk'
 
 
 module Diff
+  module Lcs
+    # Zeitwerk assumes I have control over all the gems I use, I do not
+  end
+
   module LCS
     def self.unified_diff(str_from, str_to)
       newline_seperator = "\r\n"

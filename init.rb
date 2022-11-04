@@ -1,7 +1,6 @@
 require 'redmine'
-require 'redmine_mail_shaper'
-require 'unified_diff'
-
+require_dependency File.join(File.dirname(__FILE__), 'lib/redmine_mail_shaper')
+require_dependency File.join(File.dirname(__FILE__), 'lib/diff/lcs')
 
 Redmine::Plugin.register :redmine_mail_shaper do
   name 'Redmine Mail Shaper plugin'
