@@ -28,7 +28,8 @@ Redmine::Plugin.register :redmine_mail_shaper do
 
 end
 
-Rails.configuration.to_prepare do
+# Rails.configuration.to_prepare do
+RedmineApp::Application.config.after_initialize do
   [
     [ApplicationHelper, RedmineMailShaper::Patches::ApplicationHelperMailShaperPatch],
     [IssuesHelper, RedmineMailShaper::Patches::IssuesHelperMailShaperPatch],
