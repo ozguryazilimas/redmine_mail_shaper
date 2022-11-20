@@ -35,3 +35,8 @@ If 50 is written in this area,50 changes are shown in the email.
 * Attributes: Option that you do not want to get email about changes in the issue is selected.
 * Custom fields: If there is only one change and the change is in any one of these custom fields, email will not be be send
 
+## License
+
+Copyright (c) 2020 Onur Küçük. Licensed under [GNU GPLv2](LICENSE)
+
+
