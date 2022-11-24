@@ -5,6 +5,8 @@ Redmine eposta sistemine yeni yetenekler ekler.
 
 Bu daldaki sürümler Redmine 4.x ile uyumludur, Redmine 3.x serisi için redmine3 dalını inceleyiniz.
 
+Redmine 4.x ve 5.x uyumludur.
+
 ## Özellikleri
 
 1. Wiki sayfası güncellemeleri ve yeni wiki sayfası içeriği email yoluyla alınır.
@@ -33,4 +35,9 @@ Bu alana 50 yazılır ise e-posta yoluyla e-postada 50 satır değişiklik göz�
 * Files: İş kaydında tek değişik dosya eklenmesi ise ve bu e-posta ile alınmak istenirse seçilir.
 * Attributes:  İş kaydında hangi alanda değişiklik yapıldığında e-posta alınmak istenmiyorsa o seçenek seçilir.
 * Custom fields: Özel alanda yapılan tek değişiklik için e-posta alınmak istenmiyorsa bu seçenek seçilir.
+
+## Lisans
+
+Copyright (c) 2012, Onur Küçük. lisansı [GNU GPLv2](LICENSE)
+
 

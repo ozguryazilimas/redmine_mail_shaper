@@ -5,6 +5,8 @@ Mail shaper plugin adds a new capabilities to Redmine email system.
 
 This plugin is compatible with Redmine 4.x. If you want to use it with Redmine 3.x please use redmine3 branch.
 
+Compatible with Redmine 4.x and 5.x.
+
 ## Features
 
 1. Wiki page updates and new wiki page content are received via email.
@@ -37,6 +39,6 @@ If 50 is written in this area,50 changes are shown in the email.
 
 ## License
 
-Copyright (c) 2020 Onur Küçük. Licensed under [GNU GPLv2](LICENSE)
+Copyright (c) 2012, Onur Küçük. Licensed under [GNU GPLv2](LICENSE)
 
 
